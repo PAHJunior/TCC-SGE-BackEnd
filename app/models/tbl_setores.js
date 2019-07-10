@@ -22,7 +22,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
             hooks: {
-                
+
             }
         })
     return tbl_setores
