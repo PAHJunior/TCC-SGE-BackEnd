@@ -27,6 +27,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             unique: true,
         },
+        segmento: {
+            type: DataTypes.CHAR(20),
+            allowNull: false,
+            unique: true,
+        },
         createdAt: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW()

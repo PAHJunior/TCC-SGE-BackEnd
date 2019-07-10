@@ -7,7 +7,6 @@ const setUser = (req, res, next) => {
             res.status(200).send(user)
         ])
         .catch((e) => {
-            console.log("Error")
             res.status(400).send({error: e})
         })
 }

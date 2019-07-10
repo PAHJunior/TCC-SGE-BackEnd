@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes){
             autoIncrement: true,
         },
         estoque_seguranca: {
-            type: DataTypes.NUMERIC(2,2),
+            type: DataTypes.NUMERIC(20,2),
             allowNull: false,
         },
         quantidade_total: {
@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes){
             allowNull: false
         },
         valor_estoque: {
-            type: DataTypes.NUMERIC(10,2),
+            type: DataTypes.NUMERIC(20,2),
             allowNull: false
         },
         fk_estoque_produto: {

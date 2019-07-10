@@ -1,5 +1,5 @@
-module.exports = function (sequelize, DataTypes){
-    const tbl_usuarios = sequelize.define('tbl_usuarios',{
+module.exports = function (sequelize, DataTypes) {
+    const tbl_usuarios = sequelize.define('tbl_usuarios', {
         id_usuario: {
             type: DataTypes.INTEGER(),
             allowNull: false,
@@ -7,11 +7,11 @@ module.exports = function (sequelize, DataTypes){
             autoIncrement: true,
         },
         nome: {
-            type: DataTypes.CHAR(45),
+            type: DataTypes.CHAR(100),
             allowNull: false
         },
         email: {
-            type: DataTypes.CHAR(45),
+            type: DataTypes.CHAR(100),
             allowNull: false
         },
         login: {
@@ -20,6 +20,10 @@ module.exports = function (sequelize, DataTypes){
         },
         senha: {
             type: DataTypes.CHAR(45),
+            allowNull: false
+        },
+        hierarquia: {
+            type: DataTypes.CHAR(3),
             allowNull: false
         },
         fk_usuario_setor: {
