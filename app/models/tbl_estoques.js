@@ -1,37 +1,38 @@
-module.exports = function (sequelize, DataTypes){
-    const tbl_estoques = sequelize.define('tbl_estoques',{
-        id_estoque: {
-            type: DataTypes.INTEGER(),
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        estoque_seguranca: {
-            type: DataTypes.NUMERIC(20,2),
-            allowNull: false,
-        },
-        quantidade_total: {
-            type: DataTypes.INTEGER(),
-            allowNull: false
-        },
-        valor_estoque: {
-            type: DataTypes.NUMERIC(20,2),
-            allowNull: false
-        },
-        fk_estoque_produto: {
-            type: DataTypes.INTEGER(),
-            references: {
-                model: 'tbl_produtos',
-                key: 'id_produto'
-            }
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW()
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-        }
-    })
-    return tbl_estoques
+module.exports = function (sequelize, DataTypes) {
+  const tbl_estoques = sequelize.define('tbl_estoques', {
+    id_estoque: {
+      type: DataTypes.INTEGER(),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    nome_estoque: {
+      type: DataTypes.CHAR(50),
+      allowNull: false,
+      unique: true,
+    },
+    estoque_seguranca: {
+      type: DataTypes.INTEGER(),
+      allowNull: false,
+    },
+    quantidade_total: {
+      type: DataTypes.INTEGER(),
+      defaultValue: 0,
+      allowNull: false
+    },
+    ativo: {
+      type: DataTypes.BOOLEAN(),
+      defaultValue: true,
+      allowNull: false
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW()
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
+  })
+  return tbl_estoques
 }

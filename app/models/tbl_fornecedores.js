@@ -1,10 +1,15 @@
-module.exports = function (sequelize, DataTypes){
-    const tbl_fornecedores = sequelize.define('tbl_fornecedores',{
+module.exports = function (sequelize, DataTypes) {
+    const tbl_fornecedores = sequelize.define('tbl_fornecedores', {
         id_fornecedor: {
             type: DataTypes.INTEGER(),
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
+        },
+        ativo: {
+            type: DataTypes.BOOLEAN(),
+            defaultValue: true,
+            allowNull: false
         },
         nome_fornecedor: {
             type: DataTypes.CHAR(45),
@@ -12,10 +17,6 @@ module.exports = function (sequelize, DataTypes){
         },
         cnpj: {
             type: DataTypes.CHAR(20),
-            allowNull: false
-        },
-        endereco: {
-            type: DataTypes.CHAR(45),
             allowNull: false
         },
         representante: {
@@ -30,11 +31,15 @@ module.exports = function (sequelize, DataTypes){
             type: DataTypes.CHAR(15),
             allowNull: false
         },
-        fk_fornecedor_produto: {
+        email_representante: {
+            type: DataTypes.CHAR(15),
+            allowNull: false
+        },
+        fk_fornecedor_endereco: {
             type: DataTypes.INTEGER(),
             references: {
-                model: 'tbl_produtos',
-                key: 'id_produto'
+                model: 'tbl_enderecos',
+                key: 'id_endereco'
             }
         },
         createdAt: {

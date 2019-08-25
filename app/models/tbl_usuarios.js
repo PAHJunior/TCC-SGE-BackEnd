@@ -18,20 +18,18 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.CHAR(45),
             allowNull: false
         },
+        ativo: {
+            type: DataTypes.BOOLEAN(),
+            defaultValue: true,
+            allowNull: false
+        },
         senha: {
             type: DataTypes.CHAR(45),
             allowNull: false
         },
         hierarquia: {
-            type: DataTypes.CHAR(3),
+            type: DataTypes.CHAR(10),
             allowNull: false
-        },
-        fk_usuario_setor: {
-            type: DataTypes.INTEGER(),
-            references: {
-                model: 'tbl_setores',
-                key: 'id_setor'
-            }
         },
         fk_usuario_empresa: {
             type: DataTypes.INTEGER(),
@@ -40,11 +38,11 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'id_empresa'
             }
         },
-        fk_usuario_estoque: {
+        fk_usuario_endereco: {
             type: DataTypes.INTEGER(),
             references: {
-                model: 'tbl_estoques',
-                key: 'id_estoque'
+                model: 'tbl_enderecos',
+                key: 'id_endereco'
             }
         },
         createdAt: {
