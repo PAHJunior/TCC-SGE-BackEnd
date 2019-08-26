@@ -24,7 +24,7 @@ module.exports = function (sequelize, DataTypes) {
 			unique: true,
 		},
 		numero: {
-			type: DataTypes.INTEGER(),
+			type: DataTypes.CHAR(10),
 			allowNull: false,
 		},
 		cidade: {

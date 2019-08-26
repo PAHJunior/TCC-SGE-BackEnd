@@ -52,8 +52,8 @@ module.exports = function (sequelize, DataTypes) {
 		fk_produto_unid_medida: {
 			type: DataTypes.INTEGER(),
 			references: {
-				model: 'tbl_und_medidas',
-				key: 'id_und_medidas'
+				model: 'tbl_unid_medidas',
+				key: 'id_unid_medida'
 			}
 		},
 		fk_produto_categoria: {
@@ -61,13 +61,6 @@ module.exports = function (sequelize, DataTypes) {
 			references: {
 				model: 'tbl_categoria_produtos',
 				key: 'id_categoria_produto'
-			}
-		},
-		fk_produto_movimentacao: {
-			type: DataTypes.INTEGER(),
-			references: {
-				model: 'tbl_movimentacoes',
-				key: 'id_movimentacao'
 			}
 		},
 		createdAt: {

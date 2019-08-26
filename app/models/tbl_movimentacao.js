@@ -18,6 +18,13 @@ module.exports = function (sequelize, DataTypes) {
 			type: DataTypes.INTEGER(),
 			allowNull: false
 		},
+		fk_movimentacao_produto: {
+			type: DataTypes.INTEGER(),
+			references: {
+				model: 'tbl_movimentacoes',
+				key: 'id_movimentacao'
+			}
+		},
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: DataTypes.NOW()

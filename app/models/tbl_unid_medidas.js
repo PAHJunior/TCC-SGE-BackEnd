@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes){
-    const tbl_und_medidas = sequelize.define('tbl_und_medidas',{
-        id_und_medidas: {
+    const tbl_unid_medidas = sequelize.define('tbl_unid_medidas',{
+        id_unid_medida: {
             type: DataTypes.INTEGER(),
             allowNull: false,
             primaryKey: true,
@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes){
             type: DataTypes.CHAR(45),
             allowNull: false
         },
-        desc: {
+        descricao: {
             type: DataTypes.CHAR(150)
         },
         ativo: {
@@ -26,5 +26,5 @@ module.exports = function (sequelize, DataTypes){
             type: DataTypes.DATE,
         }
     })
-    return tbl_und_medidas
+    return tbl_unid_medidas
 }
