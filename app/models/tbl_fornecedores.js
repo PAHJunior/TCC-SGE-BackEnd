@@ -32,7 +32,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         email_representante: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(150),
             allowNull: false
         },
         fk_fornecedor_endereco: {
