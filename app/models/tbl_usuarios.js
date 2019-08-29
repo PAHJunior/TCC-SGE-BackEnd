@@ -48,6 +48,10 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_hierarquia'
       }
     },
+    versaroLocal: {
+      type: DataTypes.INTEGER(),
+      defaultValue: 0
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW()

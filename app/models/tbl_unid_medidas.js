@@ -17,7 +17,11 @@ module.exports = function (sequelize, DataTypes){
 			type: DataTypes.BOOLEAN(),
 			defaultValue: true,
 			allowNull: false
-		},
+        },
+        versaroLocal: {
+            type: DataTypes.INTEGER(),
+            defaultValue: 0
+        },
         createdAt: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW()

@@ -4,7 +4,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.INTEGER(),
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true,
+            autoIncrement: true
         },
         ativo: {
             type: DataTypes.BOOLEAN(),
@@ -41,6 +41,10 @@ module.exports = function (sequelize, DataTypes) {
                 model: 'tbl_enderecos',
                 key: 'id_endereco'
             }
+        },
+        versaroLocal: {
+            type: DataTypes.INTEGER(),
+            defaultValue: 0
         },
         createdAt: {
             type: DataTypes.DATE,

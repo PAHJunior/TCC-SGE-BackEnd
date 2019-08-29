@@ -32,6 +32,10 @@ module.exports = function (sequelize, DataTypes) {
 			allowNull: false,
 			unique: true,
 		},
+		versaroLocal: {
+            type: DataTypes.INTEGER(),
+            defaultValue: 0
+        },
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: DataTypes.NOW()
