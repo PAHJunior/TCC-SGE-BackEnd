@@ -1,11 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
   const tbl_produto_has_tbl_fornecedores = sequelize.define('tbl_produto_has_tbl_fornecedores', {
-    id_categoria_produto: {
-      type: DataTypes.INTEGER(),
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     tbl_produto_id_produto: {
       type: DataTypes.INTEGER(),
       primaryKey: true,
@@ -22,7 +16,7 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_fornecedor'
       }
     },
-    versaroLocal: {
+    versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0
     },

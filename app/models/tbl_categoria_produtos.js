@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: true,
       allowNull: false
     },
-    versaroLocal: {
+    versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0
     },

@@ -70,7 +70,7 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_categoria_produto'
       }
     },
-    versaroLocal: {
+    versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0
     },

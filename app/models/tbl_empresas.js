@@ -54,7 +54,7 @@ module.exports = function (sequelize, DataTypes) {
 				key: 'id_estoque'
 			}
 		},
-		versaroLocal: {
+		versaoLocal: {
             type: DataTypes.INTEGER(),
             defaultValue: 0
         },

@@ -48,7 +48,7 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_hierarquia'
       }
     },
-    versaroLocal: {
+    versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0
     },
