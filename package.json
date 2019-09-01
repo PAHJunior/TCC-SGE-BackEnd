@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "prestart": "SET DEBUG=sge-backend:*",
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",

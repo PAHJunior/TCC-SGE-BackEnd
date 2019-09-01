@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+const db = require('../models');
 module.exports = function (sequelize, DataTypes) {
   const tbl_usuarios = sequelize.define('tbl_usuarios', {
     id_usuario: {
@@ -12,11 +14,13 @@ module.exports = function (sequelize, DataTypes) {
     },
     email: {
       type: DataTypes.CHAR(100),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     login: {
       type: DataTypes.CHAR(45),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     senha: {
       type: DataTypes.CHAR(45),
@@ -59,6 +63,20 @@ module.exports = function (sequelize, DataTypes) {
     updatedAt: {
       type: DataTypes.DATE,
     }
+  })
+  tbl_usuarios.associate = function (models){
+    tbl_usuarios.belongsTo(models.tbl_hierarquias, {
+      foreignKey: 'id_usuario',
+      targetKey: 'id_hierarquia'
+    })
+  }
+
+  tbl_usuarios.beforeCreate((tbl_usuarios, options) => {
+    return bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(tbl_usuarios.senha, salt, function (err, hash) {
+        tbl_usuarios.senha = hash
+      });
+    });
   })
   return tbl_usuarios
 }
