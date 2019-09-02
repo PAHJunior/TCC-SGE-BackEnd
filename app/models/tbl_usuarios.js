@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const db = require('../models');
 module.exports = function (sequelize, DataTypes) {
   const tbl_usuarios = sequelize.define('tbl_usuarios', {
     id_usuario: {
@@ -63,20 +62,42 @@ module.exports = function (sequelize, DataTypes) {
     updatedAt: {
       type: DataTypes.DATE,
     }
-  })
-  tbl_usuarios.associate = function (models){
-    tbl_usuarios.belongsTo(models.tbl_hierarquias, {
-      foreignKey: 'id_usuario',
-      targetKey: 'id_hierarquia'
-    })
+  },
+    {
+      hooks: {
+        beforeCreate: tbl_usuarios => {
+          const salt = bcrypt.genSaltSync()
+          tbl_usuarios.senha = bcrypt.hashSync(tbl_usuarios.senha, salt)
+          return Promise.resolve(tbl_usuarios);
+        },
+        afterValidate: tbl_usuarios => {
+          tbl_usuarios.versaoLocal = 1;
+        }
+      }
+    }
+  )
+
+  // Associando as tabelas de endereço, empresa e hierarquia
+  tbl_usuarios.associate = function (models) {
+    tbl_usuarios.belongsTo(models.tbl_hierarquias,
+      {
+        foreignKey: 'fk_usuario_hierarquia',
+        targetKey: 'id_hierarquia',
+        as: 'hierarquia'
+      });
+    tbl_usuarios.belongsTo(models.tbl_empresas,
+      {
+        foreignKey: 'fk_usuario_empresa',
+        targetKey: 'id_empresa',
+        as: 'empresa'
+      });
+    tbl_usuarios.belongsTo(models.tbl_enderecos,
+      {
+        foreignKey: 'fk_usuario_endereco',
+        targetKey: 'id_endereco',
+        as: 'endereco'
+      });
   }
 
-  tbl_usuarios.beforeCreate((tbl_usuarios, options) => {
-    return bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(tbl_usuarios.senha, salt, function (err, hash) {
-        tbl_usuarios.senha = hash
-      });
-    });
-  })
   return tbl_usuarios
 }

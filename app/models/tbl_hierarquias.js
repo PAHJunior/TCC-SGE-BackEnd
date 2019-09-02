@@ -32,7 +32,7 @@ module.exports = function (sequelize, DataTypes) {
 
   tbl_hierarquias.associate = function (models) {
     tbl_hierarquias.hasMany(models.tbl_usuarios, {
-      foreignKey: 'id_hierarquia',
+      foreignKey: 'fk_usuario_hierarquia',
       targetKey: 'id_hierarquia'
     })
   }
