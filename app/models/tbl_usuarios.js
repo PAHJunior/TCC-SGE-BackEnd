@@ -62,20 +62,26 @@ module.exports = function (sequelize, DataTypes) {
     updatedAt: {
       type: DataTypes.DATE,
     }
-  },
-    {
-      hooks: {
-        beforeCreate: tbl_usuarios => {
-          const salt = bcrypt.genSaltSync()
-          tbl_usuarios.senha = bcrypt.hashSync(tbl_usuarios.senha, salt)
-          return Promise.resolve(tbl_usuarios);
-        },
-        afterValidate: tbl_usuarios => {
-          tbl_usuarios.versaoLocal = 1;
-        }
-      }
+  })
+
+  tbl_usuarios.beforeCreate((tbl_usuarios, options) => {
+    const salt = bcrypt.genSaltSync()
+    return bcrypt.hash(tbl_usuarios.senha, salt)
+      .then((hashedPw) => {
+        tbl_usuarios.senha = hashedPw;
+      });
+  })
+
+  tbl_usuarios.beforeUpdate((tbl_usuarios, options) => {
+    if (tbl_usuarios.senha) {
+      const salt = bcrypt.genSaltSync()
+      return bcrypt.hash(tbl_usuarios.senha, salt)
+        .then((hashedPw) => {
+          tbl_usuarios.senha = hashedPw;
+        });
     }
-  )
+  })
+
 
   // Associando as tabelas de endereço, empresa e hierarquia
   tbl_usuarios.associate = function (models) {
