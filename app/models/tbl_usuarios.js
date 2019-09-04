@@ -73,14 +73,20 @@ module.exports = function (sequelize, DataTypes) {
       });
   })
 
-  tbl_usuarios.beforeUpdate((tbl_usuarios, options) => {
-    console.log("Before update")
-    if (tbl_usuarios.senha) {
+  tbl_usuarios.beforeBulkUpdate((tbl_usuarios, options) => {
+    if (tbl_usuarios.attributes.senha) {
       const salt = bcrypt.genSaltSync()
-      return bcrypt.hash(tbl_usuarios.senha, salt)
-        .then((hashedPw) => {
-          tbl_usuarios.senha = hashedPw;
-        });
+      return bcrypt.hash(tbl_usuarios.attributes.senha, salt)
+      .then((hashedPw) => { 
+        tbl_usuarios.attributes.senha = hashedPw;
+      });
+    }
+  })
+  tbl_usuarios.beforeBulkUpdate((tbl_usuarios, options) => {
+    if (tbl_usuarios.attributes.versaoLocal > 0) {
+      return tbl_usuarios.attributes.versaoLocal = tbl_usuarios.attributes.versaoLocal + 1
+    }else{
+      return tbl_usuarios.attributes.versaoLocal = 1
     }
   })
 
