@@ -15,8 +15,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
     },
     complemento: {
-      type: DataTypes.CHAR(100),
-      allowNull: false,
+      type: DataTypes.CHAR(100)
     },
     bairro: {
       type: DataTypes.CHAR(50),
