@@ -11,22 +11,13 @@ module.exports = {
         cnpj: '52.937.951/0001-95',
         segmento: 'livraria',
         fk_empresa_configuracao: 'livraria',
+        fk_empresa_configuracao: 1,
         fk_empresa_endereco: 4
-      },
-      {
-        name: 'John Doe',
-        isBetaMember: false
-      },
+      }
     ], {});
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('People', null, {});
-    */
+    return queryInterface.bulkDelete('tbl_empresas', null, {});
   }
 };

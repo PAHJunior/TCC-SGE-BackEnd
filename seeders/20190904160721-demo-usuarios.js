@@ -10,7 +10,7 @@ module.exports = {
         login: 'PAHJunior',
         senha: '123',
         fk_usuario_endereco: 1,
-        fk_usuario_empresa: 1,
+        fk_usuario_empresa: 2,
         fk_usuario_hierarquia: 1
       },
       {
@@ -19,7 +19,7 @@ module.exports = {
         login: 'Polyana',
         senha: '123',
         fk_usuario_endereco: 2,
-        fk_usuario_empresa: 1,
+        fk_usuario_empresa: 2,
         fk_usuario_hierarquia: 2
       },
       {
@@ -28,7 +28,7 @@ module.exports = {
         login: 'Natalia',
         senha: '123',
         fk_usuario_endereco: 3,
-        fk_usuario_empresa: 1,
+        fk_usuario_empresa: 2,
         fk_usuario_hierarquia: 2
       }
     ], {});

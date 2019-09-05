@@ -47,13 +47,6 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_endereco'
       }
     },
-    // fk_empresa_estoque: {
-    //   type: DataTypes.INTEGER(),
-    //   references: {
-    //     model: 'tbl_estoques',
-    //     key: 'id_estoque'
-    //   }
-    // },
     versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0

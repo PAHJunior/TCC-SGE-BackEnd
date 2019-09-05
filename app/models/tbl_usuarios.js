@@ -65,7 +65,6 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   tbl_usuarios.beforeCreate((tbl_usuarios, options) => {
-    console.log("Before create")
     const salt = bcrypt.genSaltSync()
     return bcrypt.hash(tbl_usuarios.senha, salt)
       .then((hashedPw) => {
