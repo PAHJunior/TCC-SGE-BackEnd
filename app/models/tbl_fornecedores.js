@@ -6,33 +6,16 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
-        ativo: {
-            type: DataTypes.BOOLEAN(),
-            defaultValue: true,
-            allowNull: false
-        },
-        nome_fornecedor: {
-            type: DataTypes.CHAR(45),
+        nome: {
+            type: DataTypes.CHAR(100),
             allowNull: false,
         },
         cnpj: {
-            type: DataTypes.CHAR(20),
-            allowNull: false
+            type: DataTypes.CHAR(20)
         },
-        representante: {
-            type: DataTypes.CHAR(15),
-            allowNull: false
-        },
-        telefone_fornecedor: {
-            type: DataTypes.CHAR(15),
-            allowNull: false
-        },
-        telefone_respresentante: {
-            type: DataTypes.CHAR(15),
-            allowNull: false
-        },
-        email_representante: {
-            type: DataTypes.CHAR(150),
+        ativo: {
+            type: DataTypes.BOOLEAN(),
+            defaultValue: true,
             allowNull: false
         },
         fk_fornecedor_endereco: {
@@ -40,6 +23,13 @@ module.exports = function (sequelize, DataTypes) {
             references: {
                 model: 'tbl_enderecos',
                 key: 'id_endereco'
+            }
+        },
+        fk_fornecedor_representante: {
+            type: DataTypes.INTEGER(),
+            references: {
+                model: 'tbl_representantes',
+                key: 'id_representante'
             }
         },
         versaoLocal: {
@@ -54,5 +44,20 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DATE,
         }
     })
+
+    tbl_fornecedores.associate = function (models) {
+        tbl_fornecedores.belongsTo(models.tbl_enderecos,
+            {
+                foreignKey: 'fk_fornecedor_endereco',
+                targetKey: 'id_endereco',
+                as: 'endereco'
+            });
+        tbl_fornecedores.belongsTo(models.tbl_representantes,
+            {
+                foreignKey: 'fk_fornecedor_representante',
+                targetKey: 'id_representante',
+                as: 'representante'
+            });
+    }
     return tbl_fornecedores
 }

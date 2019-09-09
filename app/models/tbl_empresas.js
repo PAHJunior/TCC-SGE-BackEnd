@@ -59,10 +59,28 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE
     }
   })
+
+  // Associações de FK
   tbl_empresas.associate = function (models) {
-    tbl_empresas.hasMany(models.tbl_usuarios, {
-      foreignKey: 'fk_usuario_hierarquia',
-      targetKey: 'id_empresa'
+
+    // Possui
+    tbl_empresas.belongsTo(models.tbl_configuracoes,
+      {
+        foreignKey: 'fk_empresa_configuracao',
+        targetKey: 'id_configuracao',
+        as: 'configuracao'
+      });
+    tbl_empresas.belongsTo(models.tbl_enderecos,
+      {
+        foreignKey: 'fk_empresa_endereco',
+        targetKey: 'id_endereco',
+        as: 'endereco'
+      });
+
+    // Tem tabelas que possui
+    tbl_empresas.hasMany(models.tbl_estoques, {
+      foreignKey: 'fk_estoque_empresa',
+      targetKey: 'id_estoque'
     })
   }
   return tbl_empresas

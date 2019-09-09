@@ -7,20 +7,22 @@ const db = require('../models')
 const getAllUsuarios = (req, res, next) => {
 
   tbl_usuarios.findAll({
-    attributes: { exclude: ['fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia'] },
+    attributes: {
+      exclude: ['fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
+    },
     include: [
       {
-        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento',],
+        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
         model: tbl_empresas,
         as: 'empresa'
       },
       {
-        attributes: ['nome'],
+        attributes: ['nome', 'id_hierarquia'],
         model: tbl_hierarquias,
         as: 'hierarquia'
       },
       {
-        attributes: { exclude: ['createdAt', 'updatedAt', 'versaoLocal', 'id_endereco'] },
+        attributes: { exclude: ['createdAt', 'updatedAt', 'versaoLocal'] },
         model: tbl_enderecos,
         as: 'endereco'
       }
@@ -39,7 +41,7 @@ const getAllUsuarios = (req, res, next) => {
   }).catch((e) => {
     let error = console.error(e)
     res.status(400)
-      .send(util.response("Error", 400, usuario, "api/usuarios", "GET", error))
+      .send(util.response("Error", 400, 'Ocorreu um error ao buscar os usuarios', "api/usuarios", "GET", error))
   })
 }
 
@@ -85,7 +87,7 @@ const getOneUsuario = (req, res, next) => {
 
 // Criar um novo usuario
 const setUsuario = (req, res, next) => {
-   tbl_usuarios.findAll({
+  tbl_usuarios.findAll({
     where: {
       [db.Sequelize.Op.or]: [
         { login: req.body.login },
@@ -94,17 +96,17 @@ const setUsuario = (req, res, next) => {
     }
   }).then((usuario) => {
     let error = []
-    for(dados in usuario ){
+    for (dados in usuario) {
       if (usuario[dados].login == req.body.login) {
         error.push(util.error("Error", "Este login já existe"))
       }
-      else if(usuario[dados].email == req.body.email){
+      else if (usuario[dados].email == req.body.email) {
         error.push(util.error("Error", "Este email já existe"))
       }
     }
-    if(error.length > 0){
+    if (error.length > 0) {
       res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", error))
-    }else{
+    } else {
       tbl_usuarios.create(req.body)
         .then((usuario) => {
           res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST", null))
@@ -123,17 +125,17 @@ const modifyUsuario = (req, res, next) => {
       id_usuario: req.params.id
     }
   })
-  .then((usuarios) => {
-    if(usuarios == 1){
-      res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
-    }else{
-      res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
-    }
-  })
-  .catch((e) => {
-    let error = console.error(e)
-    res.status(400).send(error)
-  })
+    .then((usuarios) => {
+      if (usuarios == 1) {
+        res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
+      } else {
+        res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
+      }
+    })
+    .catch((e) => {
+      let error = console.error(e)
+      res.status(400).send(error)
+    })
 }
 
 

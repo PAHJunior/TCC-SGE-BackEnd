@@ -50,7 +50,15 @@ module.exports = function (sequelize, DataTypes) {
     tbl_enderecos.hasMany(models.tbl_usuarios, {
       foreignKey: 'fk_usuario_endereco',
       targetKey: 'id_endereco'
-    })
+    });
+    tbl_enderecos.hasMany(models.tbl_empresas, {
+      foreignKey: 'fk_empresa_endereco',
+      targetKey: 'id_endereco'
+    });
+    tbl_enderecos.hasMany(models.tbl_fornecedores, {
+      foreignKey: 'fk_fornecedor_endereco',
+      targetKey: 'id_endereco'
+    });
   }
   return tbl_enderecos
 }

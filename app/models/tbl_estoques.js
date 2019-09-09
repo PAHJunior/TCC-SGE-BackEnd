@@ -29,6 +29,13 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER(),
       defaultValue: 0
     },
+    fk_estoque_empresa: {
+      type: DataTypes.INTEGER(),
+      references: {
+        model: 'tbl_empresas',
+        key: 'id_empresa'
+      }
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW()
@@ -38,5 +45,14 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     }
   })
+
+  tbl_estoques.associate = function (models) {
+    tbl_estoques.belongsTo(models.tbl_empresas,
+      {
+        foreignKey: 'fk_estoque_empresa',
+        targetKey: 'id_empresa',
+        as: 'empresa'
+      });
+  }
   return tbl_estoques
 }
