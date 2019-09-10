@@ -3,7 +3,7 @@ const util = require('./util');
 const bcrypt = require('bcrypt');
 const db = require('../models')
 
-const buscarEstoque = (req, res, next) => {
+const buscarFornecedores = (req, res, next) => {
   tbl_fornecedores.findAll({
     attributes: {
       exclude: ['fk_fornecedor_endereco', 'fk_fornecedor_representante']
@@ -42,5 +42,5 @@ const buscarEstoque = (req, res, next) => {
 }
 
 module.exports = {
-  buscarEstoque
+  buscarFornecedores
 }

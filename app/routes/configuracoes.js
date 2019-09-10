@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const { buscarFornecedores } = require('../controller/fornecedores')
+const { buscarBanco } = require('../controller/configuracao_db')
 
 /* GET usuarios listing. */
-router.get('/', buscarFornecedores);
+router.get('/', buscarBanco);
 
 module.exports = router;
