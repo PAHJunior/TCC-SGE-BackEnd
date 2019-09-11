@@ -63,7 +63,7 @@ module.exports = function (sequelize, DataTypes) {
   // Associações de FK
   tbl_empresas.associate = function (models) {
 
-    // Possui
+    // A tabela atual Possui
     tbl_empresas.belongsTo(models.tbl_configuracoes,
       {
         foreignKey: 'fk_empresa_configuracao',

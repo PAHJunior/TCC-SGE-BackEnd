@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
         }
     })
     tbl_representantes.associate = function (models) {
-        tbl_representantes.hasMany(models.tbl_empresas, {
+        tbl_representantes.hasMany(models.tbl_fornecedores, {
           foreignKey: 'fk_fornecedor_representante',
           targetKey: 'id_representante'
         });
