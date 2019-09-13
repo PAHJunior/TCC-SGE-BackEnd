@@ -87,35 +87,43 @@ const getOneUsuario = (req, res, next) => {
 
 // Criar um novo usuario
 const setUsuario = (req, res, next) => {
-  tbl_usuarios.findAll({
-    where: {
-      [db.Sequelize.Op.or]: [
-        { login: req.body.login },
-        { email: req.body.email },
-      ]
-    }
-  }).then((usuario) => {
-    let error = []
-    for (dados in usuario) {
-      if (usuario[dados].login == req.body.login) {
-        error.push(util.error("Error", "Este login já existe"))
-      }
-      else if (usuario[dados].email == req.body.email) {
-        error.push(util.error("Error", "Este email já existe"))
-      }
-    }
-    if (error.length > 0) {
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", error))
-    } else {
-      tbl_usuarios.create(req.body)
-        .then((usuario) => {
-          res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST", null))
-        })
-        .catch((e) => {
-          let error = console.error(e)
-          res.status(400).send(error)
-        })
-    }
+  // tbl_usuarios.findAll({
+  //   where: {
+  //     [db.Sequelize.Op.or]: [
+  //       { login: req.body.login },
+  //       { email: req.body.email },
+  //     ]
+  //   }
+  // }).then((usuario) => {
+  //   let error = []
+  //   for (dados in usuario) {
+  //     if (usuario[dados].login == req.body.login) {
+  //       error.push(util.error("Error", "Este login já existe"))
+  //     }
+  //     else if (usuario[dados].email == req.body.email) {
+  //       error.push(util.error("Error", "Este email já existe"))
+  //     }
+  //   }
+  //   if (error.length > 0) {
+  //     res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", error))
+  //   } else {
+  //     tbl_usuarios.create(req.body)
+  //       .then((usuario) => {
+  //         res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST", null))
+  //       })
+  //       .catch((e) => {
+  //         let error = console.error(e)
+  //         res.status(400).send(error)
+  //       })
+  //   }
+  // })
+
+  return db.sequelize.transaction((t) => {
+    return Promise.all([
+      tbl_usuarios.create(req.body, {transaction: t})
+    ]).then((data) => {
+      res.status(200).send(data)
+    })
   })
 }
 

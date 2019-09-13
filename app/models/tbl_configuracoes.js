@@ -46,10 +46,11 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   tbl_configuracoes.associate = function (models) {
-    tbl_configuracoes.belongsTo(models.tbl_empresas, {
-      foreignKey: 'fk_empresa_configuracao',
+    tbl_configuracoes.hasMany(models.tbl_empresas, {
+      foreignKey: 'fk_empresa_endereco',
       targetKey: 'id_configuracao'
-    })
+    });
+    
   }
   return tbl_configuracoes
 }

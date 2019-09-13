@@ -76,12 +76,6 @@ module.exports = function (sequelize, DataTypes) {
         targetKey: 'id_endereco',
         as: 'endereco'
       });
-
-    // Tem tabelas que possui
-    tbl_empresas.hasMany(models.tbl_estoques, {
-      foreignKey: 'fk_estoque_empresa',
-      targetKey: 'id_estoque'
-    })
   }
   return tbl_empresas
 }
