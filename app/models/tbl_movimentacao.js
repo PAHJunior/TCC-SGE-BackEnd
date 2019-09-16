@@ -8,15 +8,30 @@ module.exports = function (sequelize, DataTypes) {
 		},
 		tipo_operacao: {
 			type: DataTypes.CHAR(45),
-			allowNull: false
+			allowNull: false,
+			validate: {
+				notNull: {
+					msg: 'Campo tipo operacao é obrigátorio.'
+				}
+			}
 		},
 		dt_movimentacao: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: false,
+			validate: {
+				notNull: {
+					msg: 'Campo data de movimentação é obrigátorio.'
+				}
+			}
 		},
 		quantidade: {
 			type: DataTypes.INTEGER(),
-			allowNull: false
+			allowNull: false,
+			validate: {
+				notNull: {
+					msg: 'Campo quantidade é obrigátorio.'
+				}
+			}
 		},
 		fk_movimentacao_produto: {
 			type: DataTypes.INTEGER(),
@@ -26,9 +41,9 @@ module.exports = function (sequelize, DataTypes) {
 			}
 		},
 		versaoLocal: {
-            type: DataTypes.INTEGER(),
-            defaultValue: 0
-        },
+			type: DataTypes.INTEGER(),
+			defaultValue: 0
+		},
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: DataTypes.NOW()

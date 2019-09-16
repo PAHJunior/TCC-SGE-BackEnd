@@ -9,21 +9,46 @@ module.exports = function (sequelize, DataTypes) {
     },
     nome: {
       type: DataTypes.CHAR(100),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo nome é obrigátorio.'
+        }
+      }
     },
     email: {
       type: DataTypes.CHAR(100),
       allowNull: false,
-      unique: true
+      unique: {
+        msg: 'Email já cadastrado.'
+      },
+      validate: {
+        notNull: {
+          msg: 'Campo email é obrigátorio.'
+        }
+      }
     },
     login: {
       type: DataTypes.CHAR(45),
       allowNull: false,
-      unique: true
+      unique: {
+        msg: 'Login já cadastrado'
+      },
+      validate: {
+        notNull: {
+          msg: 'Campo login é obrigátorio.'
+        }
+      }
     },
     senha: {
       type: DataTypes.CHAR(45),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        len: [5, 45],
+        notNull: {
+          msg: 'Campo senha é obrigátorio.'
+        }
+      }
     },
     ativo: {
       type: DataTypes.BOOLEAN(),
@@ -64,6 +89,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
+  // Antes de criar o usuario, criptografe a senha dele.
   tbl_usuarios.beforeCreate((tbl_usuarios, options) => {
     const salt = bcrypt.genSaltSync()
     return bcrypt.hash(tbl_usuarios.senha, salt)
@@ -72,19 +98,21 @@ module.exports = function (sequelize, DataTypes) {
       });
   })
 
+  // Antes de atualizar o usuario, criptografe a senha dele.
   tbl_usuarios.beforeBulkUpdate((tbl_usuarios, options) => {
     if (tbl_usuarios.attributes.senha) {
       const salt = bcrypt.genSaltSync()
       return bcrypt.hash(tbl_usuarios.attributes.senha, salt)
-      .then((hashedPw) => { 
-        tbl_usuarios.attributes.senha = hashedPw;
-      });
+        .then((hashedPw) => {
+          tbl_usuarios.attributes.senha = hashedPw;
+        });
     }
   })
+  // Antes do usuario ser atualizado, some + 1 na versãoLocal
   tbl_usuarios.beforeBulkUpdate((tbl_usuarios, options) => {
     if (tbl_usuarios.attributes.versaoLocal > 0) {
       return tbl_usuarios.attributes.versaoLocal = tbl_usuarios.attributes.versaoLocal + 1
-    }else{
+    } else {
       return tbl_usuarios.attributes.versaoLocal = 1
     }
   })

@@ -13,25 +13,49 @@ module.exports = function (sequelize, DataTypes) {
     },
     razao_social: {
       type: DataTypes.CHAR(45),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo razão social é obrigátorio.'
+        }
+      }
     },
     nome_fantasia: {
       type: DataTypes.CHAR(25),
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo nome fantasia é obrigátorio.'
+        }
+      }
     },
     telefone: {
       type: DataTypes.CHAR(15),
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo telefone é obrigátorio.'
+        }
+      }
     },
     cnpj: {
       type: DataTypes.CHAR(20),
       allowNull: false,
       unique: true,
+      validate: {
+        notNull: {
+          msg: 'Campo CNPJ é obrigátorio.'
+        }
+      }
     },
     segmento: {
       type: DataTypes.CHAR(20),
       allowNull: false,
-      unique: true,
+      validate: {
+        notNull: {
+          msg: 'Campo segmento é obrigátorio.'
+        }
+      }
     },
     fk_empresa_configuracao: {
       type: DataTypes.INTEGER(),

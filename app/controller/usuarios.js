@@ -118,13 +118,43 @@ const setUsuario = (req, res, next) => {
   //   }
   // })
 
+  // Separando os dados de endereco, empresa e hierarquia
+  const endereco = req.body.endereco;
+  const empresa = req.body.empresa;
+  const hierarquia = req.body.hierarquia;
+
   return db.sequelize.transaction((t) => {
-    return Promise.all([
-      tbl_usuarios.create(req.body, {transaction: t})
-    ]).then((data) => {
-      res.status(200).send(data)
-    })
+    return tbl_enderecos.create(endereco, { transaction: t })
+      .then((endereco) => {
+        let usuario = {
+          nome: req.body.nome,
+          email: req.body.email,
+          login: req.body.login,
+          senha: req.body.senha,
+          fk_usuario_empresa: 1,
+          fk_usuario_hierarquia: 1,
+          fk_usuario_endereco: endereco.id_endereco
+        }
+        return tbl_usuarios.create(usuario, { transaction: t })
+      })
   })
+    .then((result) => {
+      res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST", null))
+    })
+    .catch((error) => {
+      let msg_erro = []
+      for (e in error.errors) {
+        let msg = {
+          titulo: "Ocorreu um erro",
+          message: error.errors[e].message,
+          value: error.errors[e].value,
+          type: error.errors[e].type,
+          validatorKey: error.errors[e].validatorKey,
+        }
+        msg_erro.push(msg)
+      }
+      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", msg_erro))
+    })
 }
 
 const modifyUsuario = (req, res, next) => {

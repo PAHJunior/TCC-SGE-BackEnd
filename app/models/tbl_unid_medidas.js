@@ -8,7 +8,12 @@ module.exports = function (sequelize, DataTypes){
         },
         nome: {
             type: DataTypes.CHAR(45),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                notNull: {
+                  msg: 'Campo nome é obrigátorio.'
+                }
+              }
         },
         descricao: {
             type: DataTypes.CHAR(150)
@@ -16,7 +21,7 @@ module.exports = function (sequelize, DataTypes){
         ativo: {
 			type: DataTypes.BOOLEAN(),
 			defaultValue: true,
-			allowNull: false
+			allowNull: false,
         },
         versaoLocal: {
             type: DataTypes.INTEGER(),

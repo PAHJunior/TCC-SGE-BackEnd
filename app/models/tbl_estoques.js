@@ -9,11 +9,23 @@ module.exports = function (sequelize, DataTypes) {
     nome_estoque: {
       type: DataTypes.CHAR(50),
       allowNull: false,
-      unique: true,
+      unique: {
+        msg: 'Nome estoque já cadastrado.'
+      },
+      validate: {
+        notNull: {
+          msg: 'Campo nome estoque é obrigátorio.'
+        }
+      }
     },
     estoque_seguranca: {
       type: DataTypes.INTEGER(),
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo estoque de segurança é obrigátorio.'
+        }
+      }
     },
     quantidade_total: {
       type: DataTypes.INTEGER(),

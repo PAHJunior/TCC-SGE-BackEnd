@@ -8,23 +8,52 @@ module.exports = function (sequelize, DataTypes) {
     },
     codigo_produto: {
       type: DataTypes.INTEGER(),
-      allowNull: false,
+      allowNull: true,
+      validate: {
+        validate(produto) {
+          // Se o codigo do produto for nulo,
+          // o id_produto irar se repetir no codigo_produto
+          if(produto == null){
+            produto = this.id_produto
+          }
+        }
+      }
     },
     nome_produto: {
       type: DataTypes.CHAR(100),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo nome produto é obrigátorio.'
+				}
+			}
     },
     preco_unitario: {
       type: DataTypes.NUMERIC(10, 2),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo preço unitario é obrigátorio.'
+				}
+			}
     },
     tipo_produto: {
       type: DataTypes.CHAR(50),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo tipo produto é obrigátorio.'
+				}
+			}
     },
     metodo_estocagem: {
       type: DataTypes.CHAR(50),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo metodo de estocagem é obrigátorio.'
+				}
+			}
     },
     data_fabricacao: {
       type: DataTypes.DATE
@@ -34,15 +63,30 @@ module.exports = function (sequelize, DataTypes) {
     },
     saldo: {
       type: DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo saldo é obrigátorio.'
+				}
+			}
     },
     quantidade_min: {
       type: DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo quantidade mínima é obrigátorio.'
+				}
+			}
     },
     quantidade_max: {
       type: DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo quantidade maxima é obrigátorio.'
+				}
+			}
     },
     ativo: {
       type: DataTypes.BOOLEAN(),

@@ -4,11 +4,16 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER(),
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     nome: {
       type: DataTypes.CHAR(45),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo nome obrigatório '
+        }
+      }
     },
     descricao: {
       type: DataTypes.CHAR(150),

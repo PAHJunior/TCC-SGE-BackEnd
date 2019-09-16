@@ -8,11 +8,21 @@ module.exports = function (sequelize, DataTypes) {
     },
     cep: {
       type: DataTypes.CHAR(12),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo CEP é obrigátorio.'
+        }
+      }
     },
     logradouro: {
       type: DataTypes.CHAR(100),
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo logradouro é obrigátorio.'
+        }
+      }
     },
     complemento: {
       type: DataTypes.CHAR(100)
@@ -20,19 +30,38 @@ module.exports = function (sequelize, DataTypes) {
     bairro: {
       type: DataTypes.CHAR(50),
       allowNull: false,
-      unique: true,
+      validate: {
+        notNull: {
+          msg: 'Campo bairro é obrigátorio.'
+        }
+      }
     },
     numero: {
       type: DataTypes.CHAR(10),
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo numero é obrigátorio.'
+        }
+      }
     },
     cidade: {
       type: DataTypes.CHAR(50),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo cidade é obrigátorio.'
+        }
+      }
     },
     uf: {
       type: DataTypes.CHAR(2),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo UF é obrigátorio.'
+        }
+      }
     },
     versaoLocal: {
       type: DataTypes.INTEGER(),
