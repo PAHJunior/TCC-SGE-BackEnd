@@ -23,6 +23,10 @@ module.exports = function (sequelize, DataTypes) {
         msg: 'Email já cadastrado.'
       },
       validate: {
+        isEmail: {
+          args: true,
+          msg: 'Campo email invalido'
+        },
         notNull: {
           msg: 'Campo email é obrigátorio.'
         }
@@ -44,7 +48,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.CHAR(45),
       allowNull: false,
       validate: {
-        len: [5, 45],
+        len: {
+          args: [5, 45],
+          msg: 'Sua senha deverá conter no mínimo 5 e no maximo 45 caracteres'
+        },
         notNull: {
           msg: 'Campo senha é obrigátorio.'
         }
@@ -120,24 +127,21 @@ module.exports = function (sequelize, DataTypes) {
 
   // Associando as tabelas de endereço, empresa e hierarquia
   tbl_usuarios.associate = function (models) {
-    tbl_usuarios.belongsTo(models.tbl_hierarquias,
-      {
-        foreignKey: 'fk_usuario_hierarquia',
-        targetKey: 'id_hierarquia',
-        as: 'hierarquia'
-      });
-    tbl_usuarios.belongsTo(models.tbl_empresas,
-      {
-        foreignKey: 'fk_usuario_empresa',
-        targetKey: 'id_empresa',
-        as: 'empresa'
-      });
-    tbl_usuarios.belongsTo(models.tbl_enderecos,
-      {
-        foreignKey: 'fk_usuario_endereco',
-        targetKey: 'id_endereco',
-        as: 'endereco'
-      });
+    tbl_usuarios.belongsTo(models.tbl_hierarquias, {
+      foreignKey: 'fk_usuario_hierarquia',
+      targetKey: 'id_hierarquia',
+      as: 'hierarquia'
+    });
+    tbl_usuarios.belongsTo(models.tbl_empresas, {
+      foreignKey: 'fk_usuario_empresa',
+      targetKey: 'id_empresa',
+      as: 'empresa'
+    });
+    tbl_usuarios.belongsTo(models.tbl_enderecos, {
+      foreignKey: 'fk_usuario_endereco',
+      targetKey: 'id_endereco',
+      as: 'endereco'
+    });
   }
 
   return tbl_usuarios
