@@ -8,30 +8,34 @@ const timestamp = () => {
     hora = data.getHours().toString();
     minuto = data.getMinutes().toString();
     segundo = data.getSeconds().toString();
-    
     return `${ano}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')} ${hora.padStart(2,'0')}:${minuto.padStart(2,'0')}:${segundo.padStart(2,'0')}`
 }
 
-const error = (titulo, msg) => {
+// mensagem padrão para res.send
+const response = (titulo, status, response, url, http, errors) => {
     return {
         titulo: titulo,
-        msg: msg
+        status: status,
+        response: response,
+        url: url,
+        http: http,
+        errors: errors
     }
 }
 
-const response = (titulo, status, response, url, http, errors ) => {
+// Mensagem padrão para erros
+const msg_error = (titulo, message, value, type, validatorKey) => {
     return {
-        titulo:     titulo,
-        status:     status,
-        response:   response,
-        url:        url,
-        http:       http,
-        errors:     errors
+        titulo: titulo,
+        message: message,
+        value: value,
+        type: type,
+        validatorKey: validatorKey,
     }
 }
 
-module.exports = { 
+module.exports = {
+    msg_error,
     timestamp,
-    response,
-    error
+    response
 }

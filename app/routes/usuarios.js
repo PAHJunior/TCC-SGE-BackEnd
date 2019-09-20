@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const { criarUsuario, getAllUsuarios, getOneUsuario, modifyUsuario } = require('../controller/usuarios.js')
+const { criarUsuario, buscarTodosUsuarios, buscarUmUsuario, modificarUsuario } = require('../controller/usuarios.js')
 
 /* GET usuarios listing. */
-router.get('/', getAllUsuarios);
+router.get('/', buscarTodosUsuarios);
 
-router.get('/:id', getOneUsuario);
+router.get('/:id', buscarUmUsuario);
 
 // Criar usuario
 router.post('/', criarUsuario);
 
 // Modificar um usuario
-router.patch('/:id', modifyUsuario);
+router.patch('/:id', modificarUsuario);
 
 module.exports = router;

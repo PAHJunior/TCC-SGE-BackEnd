@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     db_pass: {
       type: DataTypes.CHAR(45),
-      allowNull: true,
+      allowNull: false,
     },
     db_database: {
       type: DataTypes.CHAR(45),
@@ -24,13 +24,11 @@ module.exports = function (sequelize, DataTypes) {
     },
     db_port: {
       type: DataTypes.CHAR(10),
-      allowNull: false,
-      unique: true,
+      allowNull: false
     },
     db_dialect: {
       type: DataTypes.CHAR(45),
-      allowNull: false,
-      unique: true,
+      allowNull: false
     },
     versaoLocal: {
       type: DataTypes.INTEGER(),
@@ -47,10 +45,9 @@ module.exports = function (sequelize, DataTypes) {
 
   tbl_configuracoes.associate = function (models) {
     tbl_configuracoes.hasMany(models.tbl_empresas, {
-      foreignKey: 'fk_empresa_endereco',
+      foreignKey: 'fk_empresa_configuracao',
       targetKey: 'id_configuracao'
     });
-    
   }
   return tbl_configuracoes
 }

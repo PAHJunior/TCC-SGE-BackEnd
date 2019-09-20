@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER(),
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     nome: {
       type: DataTypes.CHAR(100),
@@ -25,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         isEmail: {
           args: true,
-          msg: 'Campo email invalido'
+          msg: 'Campo email inválido'
         },
         notNull: {
           msg: 'Campo email é obrigátorio.'

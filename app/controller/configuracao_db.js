@@ -2,7 +2,7 @@ const { tbl_configuracoes } = require('../models');
 const util = require('./util');
 const db = require('../models')
 
-const buscarBanco = (req, res, next) => {
+const buscarConfiguracao = (req, res, next) => {
 	tbl_configuracoes.findAll()
 		.then((configuracoes) => {
 			if ((configuracoes == null) || (configuracoes == undefined) || (configuracoes.length == 0)) {
@@ -21,5 +21,5 @@ const buscarBanco = (req, res, next) => {
 }
 
 module.exports = {
-	buscarBanco
+	buscarConfiguracao
 }

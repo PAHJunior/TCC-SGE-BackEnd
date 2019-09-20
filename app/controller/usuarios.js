@@ -9,11 +9,11 @@ const bcrypt = require('bcrypt');
 const db = require('../models')
 
 // Buscar todos os usuarios
-const getAllUsuarios = (req, res, next) => {
+const buscarTodosUsuarios = (req, res, next) => {
 
   tbl_usuarios.findAll({
     attributes: {
-      exclude: ['fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
+      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
     },
     include: [{
         attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
@@ -40,7 +40,7 @@ const getAllUsuarios = (req, res, next) => {
 
     if ((usuario == null) || (usuario == undefined) || (usuario.length == 0)) {
       res.status(404)
-        .send(util.response("Not Found", 404, usuario, "api/usuarios", "GET", null))
+        .send(util.response("Erro", 404, "Usúario não encontrado", "api/usuarios", "GET", null))
     } else {
       res.status(200)
         .send(util.response("Get Usuarios", 200, usuario, "api/usuarios", "GET", null))
@@ -53,19 +53,19 @@ const getAllUsuarios = (req, res, next) => {
 }
 
 // Buscar o usuario com o id que for passado como parametro
-const getOneUsuario = (req, res, next) => {
+const buscarUmUsuario = (req, res, next) => {
 
   tbl_usuarios.findAll({
     attributes: {
-      exclude: ['fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
+      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
     },
     include: [{
-        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', ],
+        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
         model: tbl_empresas,
         as: 'empresa'
       },
       {
-        attributes: ['nome'],
+        attributes: ['nome', 'id_hierarquia'],
         model: tbl_hierarquias,
         as: 'hierarquia'
       },
@@ -127,42 +127,78 @@ const criarUsuario = (req, res, next) => {
     .catch((error) => {
       let msg_erro = []
       for (e in error.errors) {
-        let msg = {
-          titulo: "Ocorreu um erro",
-          message: error.errors[e].message,
-          value: error.errors[e].value,
-          type: error.errors[e].type,
-          validatorKey: error.errors[e].validatorKey,
-        }
-        msg_erro.push(msg)
+        msg_erro.push(util.msg_error("Ocorreu um erro",
+          error.errors[e].message,
+          error.errors[e].value,
+          error.errors[e].type,
+          error.errors[e].validatorKey))
       }
       res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", msg_erro))
     })
 }
 
-const modifyUsuario = (req, res, next) => {
-  tbl_usuarios.update(req.body, {
-      where: {
-        id_usuario: req.params.id
+// Modificar um usuario
+const modificarUsuario = async (req, res, next) => {
+
+  // Buscando o usuario pelo id e guardando dentro de user
+  const user = await tbl_usuarios.findByPk(req.params.id)
+  try {
+
+    if (user !== null) {
+      if (user.email == req.body.email) {
+        throw `O email ${req.body.email} é o mesmo cadastrado anteriormente`
       }
-    })
-    .then((usuarios) => {
-      if (usuarios == 1) {
-        res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
-      } else {
-        res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
+      if (user.login == req.body.login) {
+        throw `O login ${req.body.login} é o mesmo cadastrado anteriormente`
       }
-    })
-    .catch((e) => {
-      let error = console.error(e)
-      res.status(400).send(error)
-    })
+      // adicionando a versão local ao corpo da requisição
+      req.body['versaoLocal'] = user.versaoLocal
+      // enviando a requisição de atualização
+      tbl_usuarios.update(req.body, {
+          where: {
+            id_usuario: req.params.id
+          }
+        })
+        .then((usuarios) => {
+          // se o retorno for 1, sucesso
+          if (usuarios == 1) {
+            res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
+          } else {
+            res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
+          }
+        })
+        .catch((error) => {
+          // variavel que contem um array de erros
+          let msg_erro = []
+          for (e in error.errors) {
+            // adicionando o json ao array de erros
+            msg_erro.push(util.msg_error("Ocorreu um erro",
+              error.errors[e].message,
+              error.errors[e].value,
+              error.errors[e].type,
+              error.errors[e].validatorKey))
+          }
+          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
+        })
+    } else {
+      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/usuario", "PATCH", null))
+    }
+  } catch (error) {
+    let msg_erro = []
+    msg_erro.push(util.msg_error(
+      "Ocorreu um erro",
+      error,
+      null,
+      null,
+      null))
+    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
+  }
 }
 
 
 module.exports = {
   criarUsuario,
-  getAllUsuarios,
-  getOneUsuario,
-  modifyUsuario
+  buscarTodosUsuarios,
+  buscarUmUsuario,
+  modificarUsuario
 }

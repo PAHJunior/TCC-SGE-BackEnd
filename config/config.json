@@ -11,14 +11,14 @@
   "test": {
     "username": "root",
     "password": null,
-    "database": "tcc_sge_test",
+    "database": "sge",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "sge",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
