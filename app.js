@@ -11,6 +11,9 @@ var usersRouter = require('./app/routes/usuarios');
 var fornecedoresRouter = require('./app/routes/fornecedores');
 var configuracoesRouter = require('./app/routes/configuracoes');
 var empresasRouter = require('./app/routes/empresas');
+var estoquesRouter = require('./app/routes/estoques');
+var hierarquiasRouter = require('./app/routes/hierarquias');
+var categoria_produtosRouter = require('./app/routes/categoria_produtos');
 
 var app = express();
 
@@ -30,6 +33,9 @@ app.use('/api/usuarios', usersRouter);
 app.use('/api/configuracoes', configuracoesRouter);
 app.use('/api/fornecedores', fornecedoresRouter);
 app.use('/api/empresas', empresasRouter);
+app.use('/api/estoques', estoquesRouter);
+app.use('/api/hierarquias', hierarquiasRouter);
+app.use('/api/categoria_produtos', categoria_produtosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

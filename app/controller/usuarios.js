@@ -16,22 +16,22 @@ const buscarTodosUsuarios = (req, res, next) => {
       exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
     },
     include: [{
-        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
-        model: tbl_empresas,
-        as: 'empresa'
+      attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
+      model: tbl_empresas,
+      as: 'empresa'
+    },
+    {
+      attributes: ['nome', 'id_hierarquia'],
+      model: tbl_hierarquias,
+      as: 'hierarquia'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
-      {
-        attributes: ['nome', 'id_hierarquia'],
-        model: tbl_hierarquias,
-        as: 'hierarquia'
-      },
-      {
-        attributes: {
-          exclude: ['createdAt', 'updatedAt', 'versaoLocal']
-        },
-        model: tbl_enderecos,
-        as: 'endereco'
-      }
+      model: tbl_enderecos,
+      as: 'endereco'
+    }
     ],
     where: {
       ativo: 1
@@ -60,22 +60,22 @@ const buscarUmUsuario = (req, res, next) => {
       exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
     },
     include: [{
-        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
-        model: tbl_empresas,
-        as: 'empresa'
+      attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
+      model: tbl_empresas,
+      as: 'empresa'
+    },
+    {
+      attributes: ['nome', 'id_hierarquia'],
+      model: tbl_hierarquias,
+      as: 'hierarquia'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal', 'id_endereco']
       },
-      {
-        attributes: ['nome', 'id_hierarquia'],
-        model: tbl_hierarquias,
-        as: 'hierarquia'
-      },
-      {
-        attributes: {
-          exclude: ['createdAt', 'updatedAt', 'versaoLocal', 'id_endereco']
-        },
-        model: tbl_enderecos,
-        as: 'endereco'
-      }
+      model: tbl_enderecos,
+      as: 'endereco'
+    }
     ],
     where: {
       id_usuario: req.params.id,
@@ -103,24 +103,24 @@ const criarUsuario = (req, res, next) => {
   const endereco = req.body.endereco;
 
   return db.sequelize.transaction((t) => {
-      return tbl_enderecos.create(endereco, {
+    return tbl_enderecos.create(endereco, {
+      transaction: t
+    })
+      .then((endereco) => {
+        let usuario = {
+          nome: req.body.nome,
+          email: req.body.email,
+          login: req.body.login,
+          senha: req.body.senha,
+          fk_usuario_empresa: req.body.fk_usuario_empresa,
+          fk_usuario_hierarquia: req.body.fk_usuario_hierarquia,
+          fk_usuario_endereco: endereco.id_endereco
+        }
+        return tbl_usuarios.create(usuario, {
           transaction: t
         })
-        .then((endereco) => {
-          let usuario = {
-            nome: req.body.nome,
-            email: req.body.email,
-            login: req.body.login,
-            senha: req.body.senha,
-            fk_usuario_empresa: req.body.fk_usuario_empresa,
-            fk_usuario_hierarquia: req.body.fk_usuario_hierarquia,
-            fk_usuario_endereco: endereco.id_endereco
-          }
-          return tbl_usuarios.create(usuario, {
-            transaction: t
-          })
-        })
-    })
+      })
+  })
     .then((result) => {
       res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${result.login} criado com sucesso`, "api/usuario", "POST"))
     })
@@ -155,10 +155,10 @@ const modificarUsuario = async (req, res, next) => {
       req.body['versaoLocal'] = user.versaoLocal
       // enviando a requisição de atualização
       tbl_usuarios.update(req.body, {
-          where: {
-            id_usuario: req.params.id
-          }
-        })
+        where: {
+          id_usuario: req.params.id
+        }
+      })
         .then((usuarios) => {
           // se o retorno for 1, sucesso
           if (usuarios == 1) {
