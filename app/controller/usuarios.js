@@ -195,10 +195,35 @@ const modificarUsuario = async (req, res, next) => {
   }
 }
 
+const loginUsuario = async (req, res, next) => {
+  const usuario = await tbl_usuarios.findOne({
+    where: {
+      login: req.body.login
+    }
+  })
+
+  if (!await bcrypt.compare(req.body.senha, usuario.senha)) {
+    req.session.isLogado = false
+    req.session.usuario = false
+    return res.status(400).send(util.response("Erro", 400, "Senha inválida", "api/usuario/login", "POST", null))
+  }
+  else {
+    req.session.isLogado = true
+    req.session.user = usuario
+    const user = {
+      nome: usuario.nome,
+      email: usuario.email,
+      login: usuario.login,
+      ativo: usuario.ativo
+    }
+    return res.status(200).send(util.response("Login", 200, user, "api/usuario/login", "POST", null))
+  }
+}
 
 module.exports = {
   criarUsuario,
   buscarTodosUsuarios,
   buscarUmUsuario,
-  modificarUsuario
+  modificarUsuario,
+  loginUsuario
 }

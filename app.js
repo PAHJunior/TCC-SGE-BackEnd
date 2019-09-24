@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session')
 
 
 // importando as rotas
@@ -16,6 +17,17 @@ var hierarquiasRouter = require('./app/routes/hierarquias');
 var categoria_produtosRouter = require('./app/routes/categoria_produtos');
 
 var app = express();
+
+// Configurando sessão do usuario
+app.use(session({
+  secret: 'tcc-sge-2019',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: (15 * 60 * 1000),
+    isLogado: false
+  }
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
