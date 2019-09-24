@@ -9,7 +9,7 @@
 
 -Npm >= 6.10.1
 
--Criar o banco de dados "tcc_sge"
+-Criar o banco de dados "sge_db"
 
   
 
@@ -18,6 +18,7 @@
   
 
 ```javascript
+npm install
 npm  start
 ```
 
