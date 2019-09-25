@@ -27,11 +27,6 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
     },
-    quantidade_total: {
-      type: DataTypes.INTEGER(),
-      defaultValue: 0,
-      allowNull: false
-    },
     ativo: {
       type: DataTypes.BOOLEAN(),
       defaultValue: true,

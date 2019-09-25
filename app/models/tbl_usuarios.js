@@ -45,7 +45,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     senha: {
-      type: DataTypes.CHAR(45),
+      type: DataTypes.CHAR(60),
       allowNull: false,
       validate: {
         len: {
