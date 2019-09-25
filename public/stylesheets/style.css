@@ -4,5 +4,11 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  background-color: #00B7FF;
+}
+
+h1 {
+  background-color: #1f6289;
+  border-radius: 5px;
+  text-align: center;
 }
