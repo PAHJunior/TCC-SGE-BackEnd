@@ -8,6 +8,9 @@ module.exports = function (sequelize, DataTypes) {
     },
     nome: {
       type: DataTypes.CHAR(45),
+      unique: {
+        msg: 'Esse grupo já foi cadastrado.'
+      },
       allowNull: false,
       validate: {
         notNull: {
@@ -17,7 +20,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     descricao: {
       type: DataTypes.CHAR(150),
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo descricao é obrigátorio.'
+        }
+      }
     },
     ativo: {
       type: DataTypes.BOOLEAN(),
@@ -43,5 +51,20 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     }
   })
+
+  tbl_grupo_produtos.associate = function (models) {
+    tbl_grupo_produtos.hasMany(models.tbl_produtos, {
+      foreignKey: 'fk_produto_grupo',
+      targetKey: 'id_grupo_produto'
+    });
+    // A tabela atual Possui
+    tbl_grupo_produtos.belongsTo(models.tbl_categoria_produtos,
+      {
+        foreignKey: 'fk_categoria_produto',
+        targetKey: 'id_categoria_produto',
+        as: 'categoria'
+      });
+  }
+
   return tbl_grupo_produtos
 }

@@ -125,21 +125,6 @@ const modificarEmpresa = async (req, res, next) => {
   try {
 
     if (empresa !== null) {
-      if (empresa.razao_social == req.body.razao_social) {
-        throw `A razão social ${req.body.razao_social} é o mesmo cadastrado anteriormente`
-      }
-      if (empresa.nome_fantasia == req.body.nome_fantasia) {
-        throw `O nome_fantasia ${req.body.nome_fantasia} é o mesmo cadastrado anteriormente`
-      }
-      if (empresa.telefone == req.body.telefone) {
-        throw `O telefone ${req.body.telefone} é o mesmo cadastrado anteriormente`
-      }
-      if (empresa.cnpj == req.body.cnpj) {
-        throw `O cnpj ${req.body.cnpj} é o mesmo cadastrado anteriormente`
-      }
-      if (empresa.segmento == req.body.segmento) {
-        throw `O segmento ${req.body.segmento} é o mesmo cadastrado anteriormente`
-      }
       // adicionando a versão local ao corpo da requisição
       req.body['versaoLocal'] = empresa.versaoLocal
       // enviando a requisição de atualização

@@ -92,9 +92,6 @@ const modificarEstoque = async (req, res, next) => {
   try {
 
     if (estoque !== null) {
-      if (estoque.nome_estoque == req.body.nome_estoque) {
-        throw `O nome ${req.body.nome_estoque} é o mesmo cadastrado anteriormente`
-      }
       // adicionando a versão local ao corpo da requisição
       req.body['versaoLocal'] = estoque.versaoLocal
       // enviando a requisição de atualização
@@ -125,7 +122,7 @@ const modificarEstoque = async (req, res, next) => {
           res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/estoques", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/usuario", "PATCH", null))
+      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/estoques", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -135,7 +132,7 @@ const modificarEstoque = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
+    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/estoques", "PATCH", msg_erro))
   }
 }
 

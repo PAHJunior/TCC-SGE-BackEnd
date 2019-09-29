@@ -145,12 +145,6 @@ const modificarUsuario = async (req, res, next) => {
   try {
 
     if (user !== null) {
-      if (user.email == req.body.email) {
-        throw `O email ${req.body.email} é o mesmo cadastrado anteriormente`
-      }
-      if (user.login == req.body.login) {
-        throw `O login ${req.body.login} é o mesmo cadastrado anteriormente`
-      }
       // adicionando a versão local ao corpo da requisição
       req.body['versaoLocal'] = user.versaoLocal
       // enviando a requisição de atualização

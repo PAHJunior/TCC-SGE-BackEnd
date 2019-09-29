@@ -81,9 +81,6 @@ const modificarHierarquia = async (req, res, next) => {
   try {
 
     if (hierarquia !== null) {
-      if (hierarquia.nome == req.body.nome) {
-        throw `O nome da hierarquia ${req.body.nome} é o mesmo cadastrado anteriormente`
-      }
       // adicionando a versão local ao corpo da requisição
       req.body['versaoLocal'] = hierarquia.versaoLocal
       // enviando a requisição de atualização

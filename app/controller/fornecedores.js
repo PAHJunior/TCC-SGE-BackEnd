@@ -124,9 +124,6 @@ const modificarFornecedor = async (req, res, next) => {
   const fornecedor = await tbl_fornecedores.findByPk(req.params.id)
   try {
     if (fornecedor !== null) {
-      if (fornecedor.cnpj == req.body.cnpj) {
-          throw `O cnpj ${req.body.cnpj} é o mesmo cadastrado anteriormente`
-      }
       // adicionando a versão local ao corpo da requisição
       req.body['versaoLocal'] = fornecedor.versaoLocal
       // enviando a requisição de atualização
