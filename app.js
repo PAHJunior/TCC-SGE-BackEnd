@@ -18,6 +18,9 @@ var categoria_produtosRouter = require('./app/routes/categoria_produtos');
 var grupo_produtosRouter = require('./app/routes/grupo_produtos');
 var unidade_medidasRouter = require('./app/routes/unidade_medidas');
 var produtosRouter = require('./app/routes/produtos');
+// Rotas dos Relatorios
+var r_produtosRouter = require('./app/routes/relatorios/produtos');
+
 
 var app = express();
 
@@ -54,6 +57,10 @@ app.use('/api/categoria_produtos', categoria_produtosRouter);
 app.use('/api/grupo_produtos', grupo_produtosRouter);
 app.use('/api/unidade_medidas', unidade_medidasRouter);
 app.use('/api/produtos', produtosRouter);
+// rotas relatorios
+app.use('/api/relatorios/produtos', r_produtosRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
