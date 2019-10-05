@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var cors = require('cors')
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session')
@@ -24,6 +25,8 @@ var r_produtosRouter = require('./app/routes/relatorios/produtos');
 
 var app = express();
 
+
+app.use(cors())
 // Configurando sessão do usuario
 app.use(session({
   secret: 'tcc-sge-2019',

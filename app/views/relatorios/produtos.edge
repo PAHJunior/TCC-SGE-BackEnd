@@ -1,4 +1,88 @@
-@each(produto in produtos)
-  <h2> Produto {{ produto.nome_produto }} </h2>
-  <p>{{ produto.preco_unitario }}</p>
-@endeach
+<!DOCTYPE html>
+<html lang="en" >
+<head >
+
+  <style>
+    .invoice-box {
+        max-width: 1200px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue';
+        color: #555;
+    }
+    .company-logo-wrapper {
+      background-color: #555;
+      width:250px;
+      height:80px;
+      padding-top:10px;
+      border-radius:8px;
+    }
+  </style>
+  <title>Relatório de produtos</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container invoice-box">
+  <h1 class="text-center">RELATÓRIO DE PRODUTOS</h1>
+  <br/>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cod Produto</th>
+        <th>Data</th>
+        <th>Produto</th>
+        <th>Operação</th>
+        <th>Quantidade</th>
+        <th>Preço Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(produto in produtos)
+      <tr>
+        <td> {{produto.id_produto}} </td>
+        <td>04/10/2019</td>
+        <td> {{ produto.nome_produto }} </td>
+        <td>Entrada</td>
+        <td>10</td>
+        <td> {{ produto.preco_unitario }} </td>
+      </tr>
+      @endeach
+    </tbody>
+    <tr class="total ">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-right">Total</td>
+        <td>
+          {{ produtos.total }}
+        </td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>
+
+<script>
+  function total(items) {
+      var sum = 0
+      items.forEach(function (i) {
+          sum += i.price
+      })
+      return sum
+  }
+});
+</script>
