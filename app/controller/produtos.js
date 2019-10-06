@@ -10,7 +10,7 @@ const db = require('../models')
 const buscarProdutos = (req, res, next) => {
   tbl_produtos.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
+      exclude: ['versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
     },
     include: [{
       attributes: {
@@ -59,7 +59,7 @@ const buscarProdutos = (req, res, next) => {
 const buscarUmProdutos = (req, res, next) => {
   tbl_produtos.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
+      exclude: ['versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
     },
     include: [{
       attributes: {

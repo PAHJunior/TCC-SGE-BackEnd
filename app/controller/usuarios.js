@@ -192,11 +192,21 @@ const modificarUsuario = async (req, res, next) => {
 const loginUsuario = async (req, res, next) => {
   const usuario = await tbl_usuarios.findOne({
     where: {
-      login: req.body.login
+      login: req.body.login,
+      ativo: true
     }
   })
-
-  if (!await bcrypt.compare(req.body.senha, usuario.senha)) {
+  console.log(usuario)
+  if (!usuario) {
+    req.session.isLogado = false
+    req.session.usuario = false
+    return res.status(400).send(util.response("Erro", 400, "Usuário não encontrado", "api/usuario/login", "POST", null))
+  }
+  
+  if (usuario.login !== req.body.login){
+    return res.status(400).send(util.response("Erro", 400, "Usuário não encontrado", "api/usuario/login", "POST", null))
+  }
+  else if (!await bcrypt.compare(req.body.senha, usuario.senha)) {
     req.session.isLogado = false
     req.session.usuario = false
     return res.status(400).send(util.response("Erro", 400, "Senha inválida", "api/usuario/login", "POST", null))
@@ -205,10 +215,11 @@ const loginUsuario = async (req, res, next) => {
     req.session.isLogado = true
     req.session.user = usuario
     const user = {
+      id: usuario.id_usuario,
       nome: usuario.nome,
       email: usuario.email,
       login: usuario.login,
-      ativo: usuario.ativo
+      isLogado: true
     }
     return res.status(200).send(util.response("Login", 200, user, "api/usuario/login", "POST", null))
   }
