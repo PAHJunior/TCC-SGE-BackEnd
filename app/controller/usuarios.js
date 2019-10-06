@@ -196,20 +196,19 @@ const loginUsuario = async (req, res, next) => {
       ativo: true
     }
   })
-  console.log(usuario)
   if (!usuario) {
     req.session.isLogado = false
     req.session.usuario = false
-    return res.status(400).send(util.response("Erro", 400, "Usuário não encontrado", "api/usuario/login", "POST", null))
+    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Usuário não encontrado", req.body.login, null, null)))
   }
   
   if (usuario.login !== req.body.login){
-    return res.status(400).send(util.response("Erro", 400, "Usuário não encontrado", "api/usuario/login", "POST", null))
+    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Usuário não encontrado", req.body.login, null, null)))
   }
   else if (!await bcrypt.compare(req.body.senha, usuario.senha)) {
     req.session.isLogado = false
     req.session.usuario = false
-    return res.status(400).send(util.response("Erro", 400, "Senha inválida", "api/usuario/login", "POST", null))
+    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Senha inválida", req.body.login, null, null)))
   }
   else {
     req.session.isLogado = true
