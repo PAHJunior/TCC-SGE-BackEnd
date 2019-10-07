@@ -10,7 +10,7 @@ const db = require('../models')
 
 // Buscar todos os usuarios
 const buscarTodosUsuarios = (req, res, next) => {
-
+  let error = []
   tbl_usuarios.findAll({
     attributes: {
       exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
@@ -37,13 +37,14 @@ const buscarTodosUsuarios = (req, res, next) => {
       ativo: 1
     }
   }).then((usuario) => {
-
     if ((usuario == null) || (usuario == undefined) || (usuario.length == 0)) {
-      res.status(404)
-        .send(util.response("Erro", 404, "Usúario não encontrado", "api/usuarios", "GET", null))
-    } else {
-      res.status(200)
-        .send(util.response("Get Usuarios", 200, usuario, "api/usuarios", "GET", null))
+      error.push(util.msg_error("Erro", "Usúario não encontrado", req.body.senha, null, null, 404))
+    }
+    else if (error.length > 0) {
+      res.status(404).send(util.response("Erro", 404, "Usúario não encontrado", "api/usuarios", "GET", error))
+    }
+    else {
+      res.status(200).send(util.response("Get Usuarios", 200, usuario, "api/usuarios", "GET", null))
     }
   }).catch((e) => {
     let error = console.error(e)
@@ -109,6 +110,11 @@ const criarUsuario = (req, res, next) => {
       .then((endereco) => {
         let usuario = {
           nome: req.body.nome,
+          rg: req.body.rg,
+          cpf: req.body.cpf,
+          dt_nascimento: req.body.dt_nascimento,
+          telefone: req.body.telefone,
+          celular: req.body.celular,
           email: req.body.email,
           login: req.body.login,
           senha: req.body.senha,
@@ -133,7 +139,7 @@ const criarUsuario = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "POST", msg_erro))
     })
 }
 
@@ -190,25 +196,24 @@ const modificarUsuario = async (req, res, next) => {
 }
 
 const loginUsuario = async (req, res, next) => {
+  let error = []
   const usuario = await tbl_usuarios.findOne({
     where: {
       login: req.body.login,
       ativo: true
     }
   })
-  if (!usuario) {
-    req.session.isLogado = false
-    req.session.usuario = false
-    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Usuário não encontrado", req.body.login, null, null)))
-  }
-  
-  if (usuario.login !== req.body.login){
-    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Usuário não encontrado", req.body.login, null, null)))
+  if ((!usuario) || (usuario == null) || (usuario == undefined) || (usuario.login !== req.body.login)) {
+    error.push(util.msg_error("Erro", "Usuário não encontrado", req.body.login, null, null))
   }
   else if (!await bcrypt.compare(req.body.senha, usuario.senha)) {
     req.session.isLogado = false
     req.session.usuario = false
-    return res.status(200).send(util.response("Erro", 400, null, "api/usuario/login", "POST", util.msg_error("Erro", "Senha inválida", req.body.login, null, null)))
+    error.push(util.msg_error("Erro", "Senha inválida", req.body.senha, null, null))
+  }
+
+  if (error.length > 0) {
+    return res.status(200).send(util.response("Erro", 400, "Encontramos alguns erros", "api/usuario/login", "POST", error))
   }
   else {
     req.session.isLogado = true

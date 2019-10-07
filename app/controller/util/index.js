@@ -39,14 +39,15 @@ const response = (titulo, status, response, url, http, errors) => {
 }
 
 // Mensagem padrão para erros
-const msg_error = (titulo, message, value, type, validatorKey) => {
-    return [{
+const msg_error = (titulo, message, value, type, validatorKey, status) => {
+    return {
         titulo: titulo,
         message: message,
         value: value,
         type: type,
         validatorKey: validatorKey,
-    }]
+        status: status
+    }
 }
 
 module.exports = {

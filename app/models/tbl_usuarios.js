@@ -16,6 +16,33 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
     },
+    cpf: {
+      type: DataTypes.CHAR(14),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo CPF é obrigátorio.'
+        }
+      }
+    },
+    rg: {
+      type: DataTypes.CHAR(12),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo RG é obrigátorio.'
+        }
+      }
+    },
+    dt_nascimento: {
+      type: DataTypes.DATE(),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo data de nascimento é obrigátorio.'
+        }
+      }
+    },
     email: {
       type: DataTypes.CHAR(100),
       allowNull: false,
@@ -29,6 +56,19 @@ module.exports = function (sequelize, DataTypes) {
         },
         notNull: {
           msg: 'Campo email é obrigátorio.'
+        }
+      }
+    },
+    telefone: {
+      type: DataTypes.CHAR(20),
+      allowNull: true
+    },
+    celular: {
+      type: DataTypes.CHAR(20),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo celular é obrigátorio.'
         }
       }
     },
