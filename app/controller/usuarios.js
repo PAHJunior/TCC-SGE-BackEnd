@@ -41,7 +41,13 @@ const buscarTodosUsuarios = (req, res, next) => {
       error.push(util.msg_error("Erro", "Usúario não encontrado", req.body.senha, null, null, 404))
     }
     else if (error.length > 0) {
-      res.status(404).send(util.response("Erro", 404, "Usúario não encontrado", "api/usuarios", "GET", error))
+      res.status(200).send(util.response(
+        "Erro",
+        404,
+        "Usúario não encontrado",
+        "api/usuarios", "GET", 
+        error.push(util.msg_error("Erro", "Usúario não encontrado", req.body.senha, null, null, 404))
+      ))
     }
     else {
       res.status(200).send(util.response("Get Usuarios", 200, usuario, "api/usuarios", "GET", null))
@@ -108,11 +114,16 @@ const criarUsuario = (req, res, next) => {
       transaction: t
     })
       .then((endereco) => {
+        let dt_nascimento
+        let dt = req.body.dt_nascimento
+        console.log(dt)
+        dt = dt.split('-')
+        dt_nascimento = new Date(dt[2],dt[1],dt[0])
         let usuario = {
           nome: req.body.nome,
           rg: req.body.rg,
           cpf: req.body.cpf,
-          dt_nascimento: req.body.dt_nascimento,
+          dt_nascimento: dt_nascimento,
           telefone: req.body.telefone,
           celular: req.body.celular,
           email: req.body.email,
@@ -122,6 +133,7 @@ const criarUsuario = (req, res, next) => {
           fk_usuario_hierarquia: req.body.fk_usuario_hierarquia,
           fk_usuario_endereco: endereco.id_endereco
         }
+
         return tbl_usuarios.create(usuario, {
           transaction: t
         })

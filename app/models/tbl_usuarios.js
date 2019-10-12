@@ -19,6 +19,9 @@ module.exports = function (sequelize, DataTypes) {
     cpf: {
       type: DataTypes.CHAR(14),
       allowNull: false,
+      unique: {
+        msg: 'CPF já cadastrado.'
+      },
       validate: {
         notNull: {
           msg: 'Campo CPF é obrigátorio.'
@@ -28,6 +31,9 @@ module.exports = function (sequelize, DataTypes) {
     rg: {
       type: DataTypes.CHAR(12),
       allowNull: false,
+      unique: {
+        msg: 'RG já cadastrado.'
+      },
       validate: {
         notNull: {
           msg: 'Campo RG é obrigátorio.'
@@ -35,7 +41,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     dt_nascimento: {
-      type: DataTypes.DATE(),
+      type: DataTypes.DATEONLY(),
       allowNull: false,
       validate: {
         notNull: {
