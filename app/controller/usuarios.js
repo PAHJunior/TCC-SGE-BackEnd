@@ -114,16 +114,11 @@ const criarUsuario = (req, res, next) => {
       transaction: t
     })
       .then((endereco) => {
-        let dt_nascimento
-        let dt = req.body.dt_nascimento
-        console.log(dt)
-        dt = dt.split('-')
-        dt_nascimento = new Date(dt[2],dt[1],dt[0])
         let usuario = {
           nome: req.body.nome,
           rg: req.body.rg,
           cpf: req.body.cpf,
-          dt_nascimento: dt_nascimento,
+          dt_nascimento: util.data_yyymmdd(req.body.dt_nascimento),
           telefone: req.body.telefone,
           celular: req.body.celular,
           email: req.body.email,
@@ -210,6 +205,11 @@ const modificarUsuario = async (req, res, next) => {
 const loginUsuario = async (req, res, next) => {
   let error = []
   const usuario = await tbl_usuarios.findOne({
+    include: [{
+      attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
+      model: tbl_empresas,
+      as: 'empresa'
+    }],
     where: {
       login: req.body.login,
       ativo: true
@@ -231,11 +231,18 @@ const loginUsuario = async (req, res, next) => {
     req.session.isLogado = true
     req.session.user = usuario
     const user = {
-      id: usuario.id_usuario,
+      token: await util.generateToken({ id: usuario.id_usuario }),
+      isLogado: true,
+      id_usuario: usuario.id_usuario,
       nome: usuario.nome,
       email: usuario.email,
       login: usuario.login,
-      isLogado: true
+      empresa: {
+        id_empresa: usuario.empresa.id_empresa,
+        nome_fantasia: usuario.empresa.nome_fantasia,
+        razao_social: usuario.empresa.razao_social,
+        cnpj: usuario.empresa.cnpj
+      }
     }
     return res.status(200).send(util.response("Login", 200, user, "api/usuario/login", "POST", null))
   }

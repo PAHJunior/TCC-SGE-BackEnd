@@ -21,7 +21,8 @@ var unidade_medidasRouter = require('./app/routes/unidade_medidas');
 var produtosRouter = require('./app/routes/produtos');
 // Rotas dos Relatorios
 var r_produtosRouter = require('./app/routes/relatorios/produtos');
-
+// Rota de validação de token
+var validarRouter = require('./app/routes/validar');
 
 var app = express();
 
@@ -62,7 +63,8 @@ app.use('/api/unidade_medidas', unidade_medidasRouter);
 app.use('/api/produtos', produtosRouter);
 // rotas relatorios
 app.use('/api/relatorios/produtos', r_produtosRouter);
-
+// rota de validação de token
+app.use('/api/validar', validarRouter);
 
 
 // catch 404 and forward to error handler

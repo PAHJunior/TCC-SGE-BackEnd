@@ -18,14 +18,13 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
     },
-    estoque_seguranca: {
+    valor_estoque: {
+      type: DataTypes.NUMERIC(14, 2),
+      defaultValue: 0.0,
+    },
+    quantidade_total: {
       type: DataTypes.INTEGER(),
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Campo estoque de segurança é obrigátorio.'
-        }
-      }
+      defaultValue: 0,
     },
     ativo: {
       type: DataTypes.BOOLEAN(),

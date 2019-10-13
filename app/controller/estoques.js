@@ -82,7 +82,7 @@ const cadastrarEstoque = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/estoques", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/estoques", "POST", msg_erro))
     })
 }
 

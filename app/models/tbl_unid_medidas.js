@@ -45,7 +45,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
   tbl_unid_medidas.associate = function (models) {
-    tbl_unid_medidas.hasMany(models.tbl_usuarios, {
+    tbl_unid_medidas.hasMany(models.tbl_produtos, {
       foreignKey: 'fk_produto_unid_medida',
       targetKey: 'id_unid_medida'
     });
