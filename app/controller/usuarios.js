@@ -10,6 +10,7 @@ const db = require('../models')
 
 // Buscar todos os usuarios
 const buscarTodosUsuarios = (req, res, next) => {
+  console.log(req.headers.host)
   let error = []
   tbl_usuarios.findAll({
     attributes: {
