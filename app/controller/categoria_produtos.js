@@ -12,7 +12,7 @@ const buscarCategoria_produtos = (req, res, next) => {
   })
     .then((categoria_produtos) => {
       if ((categoria_produtos == null) || (categoria_produtos == undefined) || (categoria_produtos.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Categoria produto não encontrada", "api/categoria_produtos", "GET", null))
       } else {
         res.status(200)
@@ -20,7 +20,7 @@ const buscarCategoria_produtos = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar a categoria do produto', "api/categoria_produtos", "GET", error))
     })
 }
@@ -36,7 +36,7 @@ const buscarUmaCategoria_produto = (req, res, next) => {
   })
     .then((categoria_produtos) => {
       if ((categoria_produtos == null) || (categoria_produtos == undefined) || (categoria_produtos.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Categoria produto não encontrada", "api/categoria_produtos", "GET", null))
       } else {
         res.status(200)
@@ -44,7 +44,7 @@ const buscarUmaCategoria_produto = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao a categoria do produto', "api/categoria_produtos", "GET", error))
     })
 }
@@ -68,7 +68,7 @@ const criarCategoria_produto = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/categoria_produtos", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/categoria_produtos", "POST", msg_erro))
     })
 }
 
@@ -104,10 +104,10 @@ const modificarCategoria_produto = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/categoria_produtos", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/categoria_produtos", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/empresas", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/empresas", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -118,7 +118,7 @@ const modificarCategoria_produto = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/empresas", "PATCH", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/empresas", "PATCH", msg_erro))
   }
 }
 
