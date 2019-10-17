@@ -10,6 +10,9 @@ module.exports = function (sequelize, DataTypes) {
       nome: {
         type: DataTypes.CHAR(30),
         allowNull: false,
+        unique: {
+          msg: 'Esta hierarquia já está cadastrada.'
+        },
         validate: {
           notNull: {
             msg: 'Campo nome é obrigátorio.'

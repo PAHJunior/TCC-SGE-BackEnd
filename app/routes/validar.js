@@ -5,6 +5,6 @@ const {
 } = require('../controller/util/index.js')
 
 // Validar token, retorna true ou false...
-router.get('/:token', verificarToken);
+router.get('/:id/:token', verificarToken);
 
 module.exports = router;

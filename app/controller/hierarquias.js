@@ -13,7 +13,7 @@ const buscarHierarquia = (req, res, next) => {
   })
     .then((hierarquia) => {
       if ((hierarquia == null) || (hierarquia == undefined) || (hierarquia.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Estoque não encontrado", "api/hierarquias", "GET", null))
       } else {
         res.status(200)
@@ -21,7 +21,7 @@ const buscarHierarquia = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar as hierarquias', "api/hierarquias", "GET", error))
     })
 }
@@ -38,7 +38,7 @@ const buscarUmaHierarquia = (req, res, next) => {
   })
     .then((hierarquia) => {
       if ((hierarquia == null) || (hierarquia == undefined) || (hierarquia.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Estoque não encontrado", "api/hierarquias", "GET", null))
       } else {
         res.status(200)
@@ -46,7 +46,7 @@ const buscarUmaHierarquia = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar as hierarquias', "api/hierarquias", "GET", error))
     })
 }
@@ -70,7 +70,7 @@ const cadastrarHierarquia = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/hierarquias", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/hierarquias", "POST", msg_erro))
     })
 }
 
@@ -108,10 +108,10 @@ const modificarHierarquia = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/hierarquias", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/hierarquias", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Hierarquia não foi encontrado`, "api/hierarquias", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Hierarquia não foi encontrado`, "api/hierarquias", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []

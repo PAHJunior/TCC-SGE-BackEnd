@@ -62,10 +62,10 @@ const msg_error = (titulo, message, value, type, validatorKey, status) => {
 // Funcão que gera um token, 
 // parametro a ser recebido será um _id do usuario
 // a função gera um token unico com base no secret + _id
-// expiresIn = o token irá expirar em 1800 segundos = 30minutos
+// expiresIn = o token irá expirar em 900 segundos = 15minutos
 const generateToken = (params = {}) => {
     return jwt.sign(params, token.secret, {
-        expiresIn: '5m',
+        expiresIn: '15m',
     })
 }
 
@@ -86,7 +86,7 @@ let verificarToken = (req, res, next) => {
     console.log(req.params.token)
     let token = isToken(req.params.token)
     if (token){
-        res.status(200).send(token)
+        res.status(200).send(generateToken({id: req.params.id}))
     } else {
         res.status(200).send(token)
     }
