@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.CHAR(45),
       allowNull: false,
       unique: {
-        msg: 'Esse grupo já foi cadastrado.'
+        msg: 'Essa unidade de medida já foi cadastrada.'
       },
       validate: {
         notNull: {

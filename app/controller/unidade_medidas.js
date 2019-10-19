@@ -12,7 +12,7 @@ const buscarUnid_medida = (req, res, next) => {
   })
     .then((unid_medidas) => {
       if ((unid_medidas == null) || (unid_medidas == undefined) || (unid_medidas.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Unidade de medida não encontrada", "api/unidade_medidas", "GET", null))
       } else {
         res.status(200)
@@ -20,7 +20,7 @@ const buscarUnid_medida = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar o grupo', "api/unidade_medidas", "GET", error))
     })
 }
@@ -36,7 +36,7 @@ const buscarUmUnid_medida = (req, res, next) => {
   })
     .then((unid_medidas) => {
       if ((unid_medidas == null) || (unid_medidas == undefined) || (unid_medidas.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Unidade de medida não encontrada", "api/unidade_medidas", "GET", null))
       } else {
         res.status(200)
@@ -44,7 +44,7 @@ const buscarUmUnid_medida = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar o grupo', "api/unidade_medidas", "GET", error))
     })
 }
@@ -67,7 +67,7 @@ const criarUnid_medida = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "POST", msg_erro))
     })
 }
 
@@ -103,10 +103,10 @@ const modificarUnid_medida = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Unidade de medida não encontrada`, "api/unidade_medidas", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Unidade de medida não encontrada`, "api/unidade_medidas", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -116,7 +116,7 @@ const modificarUnid_medida = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "PATCH", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/unidade_medidas", "PATCH", msg_erro))
   }
 }
 

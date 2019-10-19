@@ -65,7 +65,7 @@ const msg_error = (titulo, message, value, type, validatorKey, status) => {
 // expiresIn = o token irá expirar em 900 segundos = 15minutos
 const generateToken = (params = {}) => {
     return jwt.sign(params, token.secret, {
-        expiresIn: '15m',
+        expiresIn: '150m',
     })
 }
 
