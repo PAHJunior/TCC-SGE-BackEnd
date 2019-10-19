@@ -10,13 +10,10 @@ module.exports = function (sequelize, DataTypes) {
 			type: DataTypes.CHAR(100),
 			allowNull: false,
 			validate: {
-        notNull: {
-          msg: 'Campo nome é obrigátorio.'
-        }
-      }
-		},
-		cnpj: {
-			type: DataTypes.CHAR(20)
+				notNull: {
+					msg: 'Campo nome é obrigátorio.'
+				}
+			}
 		},
 		ativo: {
 			type: DataTypes.BOOLEAN(),

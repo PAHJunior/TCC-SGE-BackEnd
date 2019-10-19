@@ -7,37 +7,24 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true
     },
     nome: {
-      type: DataTypes.CHAR(100),
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Campo nome é obrigátorio.'
-        }
-      }
+      type: DataTypes.CHAR(50),
+      allowNull: true
     },
     email: {
       type: DataTypes.CHAR(100),
-      allowNull: false,
-      isEmail: true,
-      validate: {
-        notNull: {
-          msg: 'Campo email é obrigátorio.'
-        }
+      allowNull: true,
+      isEmail: {
+        args: true,
+        msg: 'O e-mail informado está inválido'
       }
     },
     telefone: {
       type: DataTypes.CHAR(15),
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Campo telefone é obrigátorio.'
-        }
-      }
+      allowNull: true
     },
-    ativo: {
-      type: DataTypes.BOOLEAN(),
-      defaultValue: true,
-      allowNull: false
+    celular: {
+      type: DataTypes.CHAR(15),
+      allowNull: true
     },
     versaoLocal: {
       type: DataTypes.INTEGER(),

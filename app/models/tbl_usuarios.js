@@ -58,7 +58,7 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         isEmail: {
           args: true,
-          msg: 'Campo email inválido'
+          msg: 'O e-mail informado está inválido'
         },
         notNull: {
           msg: 'Campo email é obrigátorio.'

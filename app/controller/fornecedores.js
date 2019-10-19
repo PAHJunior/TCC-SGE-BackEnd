@@ -27,7 +27,7 @@ const buscarFornecedores = (req, res, next) => {
   })
     .then((fornecedor) => {
       if ((fornecedor == null) || (fornecedor == undefined) || (fornecedor.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Not Found", 404, fornecedor, "api/fornecedores", "GET", null))
       }
       else {
@@ -36,7 +36,7 @@ const buscarFornecedores = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar os fornecedores', "api/fornecedores", "GET", error))
     })
 }
@@ -68,7 +68,7 @@ const buscarUmFornecedores = (req, res, next) => {
   })
     .then((fornecedor) => {
       if ((fornecedor == null) || (fornecedor == undefined) || (fornecedor.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Not Found", 404, fornecedor, "api/fornecedores", "GET", null))
       }
       else {
@@ -77,7 +77,7 @@ const buscarUmFornecedores = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar os fornecedores', "api/fornecedores", "GET", error))
     })
 }
@@ -115,7 +115,7 @@ const cadastrarFornecedor = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "POST", msg_erro))
     })
 }
 
@@ -151,10 +151,10 @@ const modificarFornecedor = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/fornecedores", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/fornecedores", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -164,7 +164,7 @@ const modificarFornecedor = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "PATCH", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "PATCH", msg_erro))
   }
 }
 
