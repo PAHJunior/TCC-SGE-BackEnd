@@ -65,7 +65,7 @@ const buscarUmUsuario = (req, res, next) => {
 
   tbl_usuarios.findAll({
     attributes: {
-      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
+      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa']
     },
     include: [{
       attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
