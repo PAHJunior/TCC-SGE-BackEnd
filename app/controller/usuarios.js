@@ -14,7 +14,7 @@ const buscarTodosUsuarios = (req, res, next) => {
   let error = []
   tbl_usuarios.findAll({
     attributes: {
-      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa', 'fk_usuario_hierarquia']
+      exclude: ['senha']
     },
     include: [{
       attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
@@ -33,10 +33,7 @@ const buscarTodosUsuarios = (req, res, next) => {
       model: tbl_enderecos,
       as: 'endereco'
     }
-    ],
-    where: {
-      ativo: 1
-    }
+    ]
   }).then((usuario) => {
     if ((usuario == null) || (usuario == undefined) || (usuario.length == 0)) {
       error.push(util.msg_error("Erro", "Usúario não encontrado", req.body.senha, null, null, 404))
@@ -65,7 +62,7 @@ const buscarUmUsuario = (req, res, next) => {
 
   tbl_usuarios.findAll({
     attributes: {
-      exclude: ['senha', 'fk_usuario_endereco', 'fk_usuario_empresa']
+      exclude: ['senha']
     },
     include: [{
       attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
@@ -79,15 +76,14 @@ const buscarUmUsuario = (req, res, next) => {
     },
     {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'versaoLocal', 'id_endereco']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_enderecos,
       as: 'endereco'
     }
     ],
     where: {
-      id_usuario: req.params.id,
-      ativo: 1
+      id_usuario: req.params.id
     }
   }).then((usuario) => {
 
@@ -186,10 +182,10 @@ const modificarUsuario = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/usuario", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/usuario", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []

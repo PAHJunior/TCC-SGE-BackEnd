@@ -8,11 +8,11 @@ const db = require('../models')
 const buscarEstoque = (req, res, next) => {
   tbl_estoques.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'fk_estoque_empresa']
+      exclude: ['createdAt', 'updatedAt']
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'fk_empresa_configuracao', 'fk_empresa_endereco']
+        exclude: ['createdAt', 'updatedAt', 'fk_empresa_configuracao']
       },
       model: tbl_empresas,
       as: 'empresa'
@@ -36,11 +36,11 @@ const buscarEstoque = (req, res, next) => {
 const buscarUmEstoque = (req, res, next) => {
   tbl_estoques.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'fk_estoque_empresa']
+      exclude: ['createdAt', 'updatedAt']
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'fk_empresa_configuracao', 'fk_empresa_endereco']
+        exclude: ['createdAt', 'updatedAt', 'fk_empresa_configuracao']
       },
       model: tbl_empresas,
       as: 'empresa'
