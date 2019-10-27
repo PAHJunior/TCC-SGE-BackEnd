@@ -8,11 +8,11 @@ const db = require('../models')
 const buscarGrupo_produtos = (req, res, next) => {
   tbl_grupo_produtos.findAll({
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'fk_categoria_produto', 'ativo']
+      exclude: ['createdAt', 'updatedAt',]
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo']
+        exclude: ['createdAt', 'updatedAt']
       },
       model: tbl_categoria_produtos,
       as: 'categoria'
@@ -20,7 +20,7 @@ const buscarGrupo_produtos = (req, res, next) => {
   })
     .then((grupo_produtos) => {
       if ((grupo_produtos == null) || (grupo_produtos == undefined) || (grupo_produtos.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Grupo não encontrada", "api/grupo_produtos", "GET", null))
       } else {
         res.status(200)
@@ -28,7 +28,7 @@ const buscarGrupo_produtos = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar o grupo', "api/grupo_produtos", "GET", error))
     })
 }
@@ -40,7 +40,7 @@ const buscarUmGrupo_produto = (req, res, next) => {
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo']
+        exclude: ['createdAt', 'updatedAt']
       },
       model: tbl_categoria_produtos,
       as: 'categoria'
@@ -51,7 +51,7 @@ const buscarUmGrupo_produto = (req, res, next) => {
   })
     .then((grupo_produtos) => {
       if ((grupo_produtos == null) || (grupo_produtos == undefined) || (grupo_produtos.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Grupo não encontrado", "api/grupo_produtos", "GET", null))
       } else {
         res.status(200)
@@ -59,7 +59,7 @@ const buscarUmGrupo_produto = (req, res, next) => {
       }
     }).catch((e) => {
       let error = console.error(e)
-      res.status(400)
+      res.status(200)
         .send(util.response("Error", 400, 'Ocorreu um error ao buscar o grupo', "api/grupo_produtos", "GET", error))
     })
 }
@@ -82,7 +82,7 @@ const criarGrupo_produto = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "POST", msg_erro))
     })
 }
 
@@ -118,10 +118,10 @@ const modificarGrupo_produto = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "PATCH", msg_erro))
         })
     } else {
-      res.status(400).send(util.response("Erros", 404, `Grupo não encontrado`, "api/grupo_produtos", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Grupo não encontrado`, "api/grupo_produtos", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -131,7 +131,7 @@ const modificarGrupo_produto = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "PATCH", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/grupo_produtos", "PATCH", msg_erro))
   }
 }
 
