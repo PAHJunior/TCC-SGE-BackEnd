@@ -7,24 +7,18 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true,
     },
     codigo_produto: {
-      type: DataTypes.INTEGER(),
+      type: DataTypes.CHAR(45),
       allowNull: true,
       unique: {
         msg: 'O código informado já está cadastrado'
-      },
-      validate: {
-        validate(produto) {
-          // Se o codigo do produto for nulo,
-          // o id_produto irar se repetir no codigo_produto
-          if(produto == null){
-            produto = this.id_produto
-          }
-        }
       }
     },
     nome_produto: {
       type: DataTypes.CHAR(100),
       allowNull: false,
+      unique: {
+        msg: 'O produto informado já está cadastrado'
+      },
       validate: {
 				notNull: {
 					msg: 'Campo nome produto é obrigátorio.'
@@ -37,15 +31,6 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
 				notNull: {
 					msg: 'Campo preço unitario é obrigátorio.'
-				}
-			}
-    },
-    metodo_estocagem: {
-      type: DataTypes.CHAR(50),
-      allowNull: false,
-      validate: {
-				notNull: {
-					msg: 'Campo metodo de estocagem é obrigátorio.'
 				}
 			}
     },
@@ -96,7 +81,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       validate: {
 				notNull: {
-					msg: 'Campo unidade de medida obrigátorio.'
+					msg: 'Selecione uma unidade de medida.'
 				}
 			}
     },
@@ -109,7 +94,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       validate: {
 				notNull: {
-					msg: 'Campo categoria é obrigátorio.'
+					msg: 'Selecione uma categoria.'
 				}
 			}
     },
@@ -122,7 +107,33 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       validate: {
 				notNull: {
-					msg: 'Campo grupo é obrigátorio.'
+					msg: 'Selecione um grupo.'
+				}
+			}
+    },
+    fk_produto_fornecedor: {
+      type: DataTypes.INTEGER(),
+      references: {
+        model: 'tbl_fornecedores',
+        key: 'id_fornecedor'
+      },
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Selecione um fornecedor.'
+				}
+			}
+    },
+    fk_produto_estoque: {
+      type: DataTypes.INTEGER(),
+      references: {
+        model: 'tbl_estoques',
+        key: 'id_estoque'
+      },
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Selecione um estoque.'
 				}
 			}
     },
@@ -163,6 +174,16 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'fk_produto_grupo',
       targetKey: 'id_grupo_produto',
       as: 'grupo'
+    });
+    tbl_produtos.belongsTo(models.tbl_fornecedores, {
+      foreignKey: 'fk_produto_fornecedor',
+      targetKey: 'id_fornecedor',
+      as: 'fornecedor'
+    });
+    tbl_produtos.belongsTo(models.tbl_estoques, {
+      foreignKey: 'fk_produto_estoque',
+      targetKey: 'id_estoque',
+      as: 'estoque'
     });
   }
   return tbl_produtos

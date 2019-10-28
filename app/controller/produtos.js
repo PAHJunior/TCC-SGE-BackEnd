@@ -2,7 +2,9 @@ const {
   tbl_produtos,
   tbl_unid_medidas,
   tbl_categoria_produtos,
-  tbl_grupo_produtos
+  tbl_grupo_produtos,
+  tbl_fornecedores,
+  tbl_estoques
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
@@ -10,33 +12,47 @@ const db = require('../models')
 const buscarProdutos = (req, res, next) => {
   tbl_produtos.findAll({
     attributes: {
-      exclude: ['versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
+      exclude: ['versaoLocal']
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_unid_medidas,
       as: 'unidade_medida'
     },
     {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_categoria_produtos,
       as: 'categoria'
     },
     {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_grupo_produtos,
       as: 'grupo'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_fornecedores,
+      as: 'fornecedor'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_estoques,
+      as: 'estoque'
     }]
   })
     .then((unid_medidas) => {
       if ((unid_medidas == null) || (unid_medidas == undefined) || (unid_medidas.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Os produtos não foram encontrados", "api/produtos", "GET", null))
       } else {
         res.status(200)
@@ -52,35 +68,50 @@ const buscarProdutos = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "GET", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "GET", msg_erro))
     })
 }
 
 const buscarUmProdutos = (req, res, next) => {
   tbl_produtos.findAll({
+    
     attributes: {
-      exclude: ['versaoLocal', 'fk_produto_unid_medida', 'fk_produto_categoria', 'fk_produto_grupo']
+      exclude: ['versaoLocal']
     },
     include: [{
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_unid_medidas,
       as: 'unidade_medida'
     },
     {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_categoria_produtos,
       as: 'categoria'
     },
     {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'ativo', 'versaoLocal']
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
       },
       model: tbl_grupo_produtos,
       as: 'grupo'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_fornecedores,
+      as: 'fornecedor'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_estoques,
+      as: 'estoque'
     }],
     where: {
       id_produto: req.params.id
@@ -88,7 +119,7 @@ const buscarUmProdutos = (req, res, next) => {
   })
     .then((unid_medidas) => {
       if ((unid_medidas == null) || (unid_medidas == undefined) || (unid_medidas.length == 0)) {
-        res.status(404)
+        res.status(200)
           .send(util.response("Erro", 404, "Produto não encontrado", "api/produtos", "GET", null))
       } else {
         res.status(200)
@@ -104,7 +135,7 @@ const buscarUmProdutos = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "GET", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "GET", msg_erro))
     })
 }
 
@@ -118,6 +149,7 @@ const criarProduto = (req, res, next) => {
       res.status(201).send(util.response("Cadastrar produto", 201, `Produto ${result.nome_produto} criado com sucesso`, "api/produtos", "POST"))
     })
     .catch((error) => {
+      console.log(error)
       let msg_erro = []
       for (e in error.errors) {
         msg_erro.push(util.msg_error("Ocorreu um erro",
@@ -126,7 +158,7 @@ const criarProduto = (req, res, next) => {
           error.errors[e].type,
           error.errors[e].validatorKey))
       }
-      res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "POST", msg_erro))
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "POST", msg_erro))
     })
 }
 
@@ -164,10 +196,10 @@ const modificarProduto = async (req, res, next) => {
               error.errors[e].type,
               error.errors[e].validatorKey))
           }
-          res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "PATCH", msg_erro))
+          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "PATCH", msg_erro))
         })
     } else {
-      res.status(404).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/produtos", "PATCH", null))
+      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/produtos", "PATCH", null))
     }
   } catch (error) {
     let msg_erro = []
@@ -177,7 +209,7 @@ const modificarProduto = async (req, res, next) => {
       null,
       null,
       null))
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "PATCH", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "PATCH", msg_erro))
   }
 }
 

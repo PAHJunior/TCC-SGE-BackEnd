@@ -4,7 +4,8 @@ const {
     buscarGrupo_produtos,
     buscarUmGrupo_produto,
     criarGrupo_produto,
-    modificarGrupo_produto
+    modificarGrupo_produto,
+    buscarGrupoByCategoria
 } = require('../controller/grupo_produtos')
 
 /* Buscar todos os grupo */
@@ -18,6 +19,9 @@ router.post('/', criarGrupo_produto);
 
 /* Modificar um grupo. */
 router.patch('/:id', modificarGrupo_produto);
+
+/* Buscar grupo peloo id da categoria um grupo. */
+router.get('/:id/categoria', buscarGrupoByCategoria);
 
 
 module.exports = router;

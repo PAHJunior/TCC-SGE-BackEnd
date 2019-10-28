@@ -135,9 +135,41 @@ const modificarGrupo_produto = async (req, res, next) => {
   }
 }
 
+const buscarGrupoByCategoria = (req, res, next) => {
+  tbl_grupo_produtos.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt']
+    },
+    include: [{
+      attributes: {
+        exclude: ['createdAt', 'updatedAt']
+      },
+      model: tbl_categoria_produtos,
+      as: 'categoria',
+      where: {
+        id_categoria_produto: req.params.id
+      }
+    }]
+  })
+    .then((grupo_produtos) => {
+      if ((grupo_produtos == null) || (grupo_produtos == undefined) || (grupo_produtos.length == 0)) {
+        res.status(200)
+          .send(util.response("Erro", 404, "Grupo não encontrado", "api/grupo_produtos", "GET", null))
+      } else {
+        res.status(200)
+          .send(util.response("Buscar grupo", 200, grupo_produtos, "api/grupo_produtos", "GET", null))
+      }
+    }).catch((e) => {
+      let error = console.error(e)
+      res.status(200)
+        .send(util.response("Error", 400, 'Ocorreu um error ao buscar o grupo', "api/grupo_produtos", "GET", error))
+    })
+}
+
 module.exports = {
   buscarGrupo_produtos,
   buscarUmGrupo_produto,
   criarGrupo_produto,
-  modificarGrupo_produto
+  modificarGrupo_produto,
+  buscarGrupoByCategoria
 }

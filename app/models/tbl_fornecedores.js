@@ -48,18 +48,20 @@ module.exports = function (sequelize, DataTypes) {
 	})
 
 	tbl_fornecedores.associate = function (models) {
-		tbl_fornecedores.belongsTo(models.tbl_enderecos,
-			{
-				foreignKey: 'fk_fornecedor_endereco',
-				targetKey: 'id_endereco',
-				as: 'endereco'
-			});
-		tbl_fornecedores.belongsTo(models.tbl_representantes,
-			{
-				foreignKey: 'fk_fornecedor_representante',
-				targetKey: 'id_representante',
-				as: 'representante'
-			});
+		tbl_fornecedores.belongsTo(models.tbl_enderecos, {
+			foreignKey: 'fk_fornecedor_endereco',
+			targetKey: 'id_endereco',
+			as: 'endereco'
+		});
+		tbl_fornecedores.belongsTo(models.tbl_representantes, {
+			foreignKey: 'fk_fornecedor_representante',
+			targetKey: 'id_representante',
+			as: 'representante'
+		});
+		tbl_fornecedores.hasMany(models.tbl_produtos, {
+			foreignKey: 'fk_produto_fornecedor',
+			targetKey: 'id_fornecedor'
+		});
 	}
 	return tbl_fornecedores
 }
