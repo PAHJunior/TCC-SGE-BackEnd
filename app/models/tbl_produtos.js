@@ -7,11 +7,8 @@ module.exports = function (sequelize, DataTypes) {
       autoIncrement: true,
     },
     codigo_produto: {
-      type: DataTypes.CHAR(45),
-      allowNull: true,
-      unique: {
-        msg: 'O código informado já está cadastrado'
-      }
+      type: DataTypes.CHAR(20),
+      allowNull: true
     },
     nome_produto: {
       type: DataTypes.CHAR(100),
@@ -70,6 +67,11 @@ module.exports = function (sequelize, DataTypes) {
     ativo: {
       type: DataTypes.BOOLEAN(),
       defaultValue: true,
+      allowNull: false,
+    },
+    controlaLote: {
+      type: DataTypes.BOOLEAN(),
+      defaultValue: false,
       allowNull: false,
     },
     fk_produto_unid_medida: {
