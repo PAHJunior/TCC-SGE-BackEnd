@@ -11,16 +11,26 @@ const criarMovimentacao = async (req, res, next) => {
   // 1 ---- Entrada
   // 2 ---- Saida
   // 3 ---- Ajuste
+
+  // Se for uma ENTRADA
   if (req.body.tipo_operacao == 1) {
     /*
-      Saldo previsto é a quantidade a ser adicionada ao produto mais
+      Saldo é a quantidade a ser adicionada ao produto mais
       o saldo atual do produto
     */
     let saldo = req.body.quantidade + produto.saldo
     if (saldo > produto.quantidade_max) {
       throw `A quantidade informada ultrapasou a quantidade máxima do produto ${produto.nome_produto}`
     }
+    /*
+      A quantidade informada não pode ser menor do que ZERO,
+      caso queria diminuir a quantidade de produtos utilize a opção 'AJUSTE'
+    */
+    if (req.body.quantidade <= 0) {
+      throw `A Quantidade informada é menor ou igual a 0, utilize o tipo de operação 'AJUSTE'`
+    }
   }
+  // Se for uma SAIDA
   else if (req.body.tipo_operacao == 2) {
     /*
       A quantidade informada não pode ser maior que o saldo
