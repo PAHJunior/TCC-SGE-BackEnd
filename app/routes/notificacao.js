@@ -4,6 +4,6 @@ const {
     buscarNotificacaoByUser
 } = require('../controller/notificacao')
 
-router.get('/:user', buscarNotificacaoByUser);
+router.get('/:id', buscarNotificacaoByUser);
 
 module.exports = router;

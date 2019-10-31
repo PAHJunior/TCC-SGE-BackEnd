@@ -129,10 +129,21 @@ const criarUsuario = (req, res, next) => {
         return tbl_usuarios.create(usuario, {
           transaction: t
         })
+          .then((notificacao) => {
+
+            let notify = {
+              fk_usuario: notificacao.id_usuario,
+              descricao: `Olá ${notificacao.nome} seja bem vindo ao Sistema SGE`
+            }
+            return tbl_notificacoes.create(notify, {
+              transaction: t
+            })
+          })
       })
   })
-    .then((result) => {
-      res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${result.login} criado com sucesso`, "api/usuario", "POST"))
+    .then(async (result) => {
+      const usuario = await tbl_usuarios.findByPk(result.fk_usuario)
+      res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST"))
     })
     .catch((error) => {
       let msg_erro = []

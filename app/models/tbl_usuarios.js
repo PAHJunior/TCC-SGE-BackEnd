@@ -193,7 +193,7 @@ module.exports = function (sequelize, DataTypes) {
     });
     tbl_usuarios.hasMany(models.tbl_notificacoes, {
       foreignKey: 'fk_usuario',
-      targetKey: 'id_usuario'
+      targetKey: 'id_notificacao'
     });
   }
 
