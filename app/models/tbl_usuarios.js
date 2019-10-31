@@ -1,4 +1,7 @@
 const bcrypt = require('bcrypt');
+const {
+  tbl_notificacoes,
+} = require('../models');
 module.exports = function (sequelize, DataTypes) {
   const tbl_usuarios = sequelize.define('tbl_usuarios', {
     id_usuario: {
@@ -187,6 +190,10 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'fk_usuario_endereco',
       targetKey: 'id_endereco',
       as: 'endereco'
+    });
+    tbl_usuarios.hasMany(models.tbl_notificacoes, {
+      foreignKey: 'fk_usuario',
+      targetKey: 'id_usuario'
     });
   }
 

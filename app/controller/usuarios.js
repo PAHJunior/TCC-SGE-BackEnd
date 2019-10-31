@@ -2,7 +2,8 @@ const {
   tbl_usuarios,
   tbl_hierarquias,
   tbl_empresas,
-  tbl_enderecos
+  tbl_enderecos,
+  tbl_notificacoes
 } = require('../models');
 const util = require('./util');
 const bcrypt = require('bcrypt');
@@ -42,7 +43,7 @@ const buscarTodosUsuarios = (req, res, next) => {
         "Erro",
         404,
         "Usúario não encontrado",
-        "api/usuarios", "GET", 
+        "api/usuarios", "GET",
         error.push(util.msg_error("Erro", "Usúario não encontrado", req.body.senha, null, null, 404))
       ))
     }

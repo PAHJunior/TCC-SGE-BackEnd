@@ -19,6 +19,7 @@ var categoria_produtosRouter = require('./app/routes/categoria_produtos');
 var grupo_produtosRouter = require('./app/routes/grupo_produtos');
 var unidade_medidasRouter = require('./app/routes/unidade_medidas');
 var produtosRouter = require('./app/routes/produtos');
+var notificacaoRouter = require('./app/routes/notificacao');
 // Rotas dos Relatorios
 var r_produtosRouter = require('./app/routes/relatorios/produtos');
 // Rota de validação de token
@@ -61,6 +62,7 @@ app.use('/api/categoria_produtos', categoria_produtosRouter);
 app.use('/api/grupo_produtos', grupo_produtosRouter);
 app.use('/api/unidade_medidas', unidade_medidasRouter);
 app.use('/api/produtos', produtosRouter);
+app.use('/api/notificacoes', notificacaoRouter);
 // rotas relatorios
 app.use('/api/relatorios/produtos', r_produtosRouter);
 // rota de validação de token
