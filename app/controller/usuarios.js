@@ -130,10 +130,9 @@ const criarUsuario = (req, res, next) => {
           transaction: t
         })
           .then((notificacao) => {
-
             let notify = {
               fk_usuario: notificacao.id_usuario,
-              descricao: `Olá ${notificacao.nome} seja bem vindo ao Sistema SGE`
+              descricao: `Olá ${notificacao.nome} seja bem vindo(a) ao Sistema SGE`
             }
             return tbl_notificacoes.create(notify, {
               transaction: t
@@ -213,11 +212,18 @@ const modificarUsuario = async (req, res, next) => {
 const loginUsuario = async (req, res, next) => {
   let error = []
   const usuario = await tbl_usuarios.findOne({
-    include: [{
-      attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
-      model: tbl_empresas,
-      as: 'empresa'
-    }],
+    include: [
+      {
+        attributes: ['razao_social', 'nome_fantasia', 'cnpj', 'segmento', 'id_empresa'],
+        model: tbl_empresas,
+        as: 'empresa'
+      },
+      {
+        attributes: ['id_hierarquia', 'nome'],
+        model: tbl_hierarquias,
+        as: 'hierarquia'
+      }
+    ],
     where: {
       login: req.body.login,
       ativo: true
@@ -250,6 +256,10 @@ const loginUsuario = async (req, res, next) => {
         nome_fantasia: usuario.empresa.nome_fantasia,
         razao_social: usuario.empresa.razao_social,
         cnpj: usuario.empresa.cnpj
+      },
+      hierarquia: {
+        id_hierarquia: usuario.hierarquia.id_hierarquia,
+        nome: usuario.hierarquia.nome
       }
     }
     return res.status(200).send(util.response("Login", 200, user, "api/usuario/login", "POST", null))

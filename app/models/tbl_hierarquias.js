@@ -43,6 +43,10 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'fk_usuario_hierarquia',
       targetKey: 'id_hierarquia'
     })
+    tbl_hierarquias.hasMany(models.tbl_notificacoes, {
+      foreignKey: 'fk_hierarquia',
+      targetKey: 'id_hierarquia'
+    })
   }
   return tbl_hierarquias
 }

@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const {
-    buscarNotificacaoByUser
+    buscarNotificacao
 } = require('../controller/notificacao')
 
-router.get('/:id', buscarNotificacaoByUser);
+router.get('/:user/:hierarquia', buscarNotificacao);
 
 module.exports = router;

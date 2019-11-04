@@ -16,10 +16,19 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     fk_usuario: {
+      allowNull: true,
       type: DataTypes.INTEGER(),
       references: {
         model: 'tbl_usuarios',
         key: 'id_usuario'
+      }
+    },
+    fk_hierarquia: {
+      allowNull: true,
+      type: DataTypes.INTEGER(),
+      references: {
+        model: 'tbl_hierarquias',
+        key: 'id_hierarquia'
       }
     },
     versaoLocal: {
@@ -41,6 +50,11 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'fk_usuario',
       targetKey: 'id_usuario',
       as: 'usuarios'
+    });
+    tbl_notificacoes.belongsTo(models.tbl_hierarquias, {
+      foreignKey: 'fk_hierarquia',
+      targetKey: 'id_hierarquia',
+      as: 'hierarquia'
     });
   }
   return tbl_notificacoes
