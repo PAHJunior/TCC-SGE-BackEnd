@@ -55,6 +55,13 @@ module.exports = function (sequelize, DataTypes) {
         key: 'id_movimentacao'
       }
     },
+    fk_meses: {
+      type: DataTypes.INTEGER(),
+      references: {
+        model: 'tbl_meses',
+        key: 'id_meses'
+      }
+    },
     versaoLocal: {
       type: DataTypes.INTEGER(),
       defaultValue: 0
@@ -67,5 +74,19 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     }
   })
+
+  tbl_movimentacoes.associate = function (models) {
+    tbl_movimentacoes.belongsTo(models.tbl_produtos, {
+      foreignKey: 'fk_movimentacao_produto',
+      targetKey: 'id_produto',
+      as: 'produto'
+    });
+
+    tbl_movimentacoes.belongsTo(models.tbl_meses, {
+      foreignKey: 'fk_meses',
+      targetKey: 'id_meses',
+      as: 'mes'
+    });
+  }
   return tbl_movimentacoes
 }

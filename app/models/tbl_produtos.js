@@ -187,6 +187,12 @@ module.exports = function (sequelize, DataTypes) {
       targetKey: 'id_estoque',
       as: 'estoque'
     });
+
+    // 
+    tbl_produtos.hasMany(models.tbl_movimentacoes, {
+      foreignKey: 'fk_movimentacao_produto',
+      targetKey: 'id_produto'
+    });
   }
   return tbl_produtos
 }

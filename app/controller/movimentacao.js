@@ -62,6 +62,9 @@ const criarMovimentacao = async (req, res, next) => {
 
     // Atribuindo o saldo ao saldo do produto
     req.body.saldo_produto = saldo
+    let dtmov = req.body.dt_movimentacao
+    dtmov = dtmov.split('/')
+    req.body['fk_meses'] = dtmov[1]
 
     return db.sequelize.transaction((t) => {
       return tbl_movimentacoes.create(req.body, {
