@@ -41,6 +41,13 @@ const buscarNotificacao = (req, res, next) => {
     })
 }
 
+const testequery = (req, res, next) => {
+  db.sequelize.query("select * from tbl_meses", { type: db.sequelize.QueryTypes.SELECT})
+    .then((meses) => {
+      res.send(meses)
+    })
+}
 module.exports = {
-  buscarNotificacao
+  buscarNotificacao,
+  testequery
 }
