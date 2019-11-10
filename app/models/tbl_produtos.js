@@ -31,12 +31,6 @@ module.exports = function (sequelize, DataTypes) {
 				}
 			}
     },
-    data_fabricacao: {
-      type: DataTypes.DATE
-    },
-    validade: {
-      type: DataTypes.DATE
-    },
     saldo: {
       type: DataTypes.INTEGER(),
       allowNull: false,

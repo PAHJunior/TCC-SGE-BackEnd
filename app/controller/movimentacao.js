@@ -1,7 +1,9 @@
 const {
   tbl_produtos,
   tbl_movimentacoes,
-  tbl_notificacoes
+  tbl_notificacoes,
+  tbl_meses,
+  tbl_tipo_documentos
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
@@ -13,14 +15,13 @@ const criarMovimentacao = async (req, res, next) => {
     // 1 ---- Entrada
     // 2 ---- Saida
     let saldo = 0
-
     // Se for uma ENTRADA
     if (req.body.tipo_operacao == 1) {
       /*
         A quantidade informada não pode ser menor do que ZERO,
         caso queria diminuir a quantidade de produtos utilize a opção 'AJUSTE'
       */
-      saldo = req.body.quantidade + produto.saldo
+      saldo = parseInt(req.body.quantidade) + produto.saldo
       if (req.body.quantidade <= 0) {
         throw `A Quantidade informada é menor ou igual a 0`
       }
@@ -50,7 +51,7 @@ const criarMovimentacao = async (req, res, next) => {
           fk_hierarquia: 1,
           descricao: `O saldo do produto ${produto.nome_produto} é de ${saldo} e está abaixo do nivel defenido como quantidade miníma, '${produto.quantidade_min}'`
         }
-        tbl_notificacoes.create(notify)
+        await tbl_notificacoes.create(notify)
       }
       else if (req.body.quantidade <= 0) {
         throw `A Quantidade informada é menor ou igual à 0`
@@ -61,9 +62,9 @@ const criarMovimentacao = async (req, res, next) => {
     }
 
     // Atribuindo o saldo ao saldo do produto
-    req.body.saldo_produto = saldo
+    req.body['saldo_produto'] = saldo
     let dtmov = req.body.dt_movimentacao
-    dtmov = dtmov.split('/')
+    dtmov = dtmov.split('-')
     req.body['fk_meses'] = dtmov[1]
 
     return db.sequelize.transaction((t) => {
@@ -75,6 +76,7 @@ const criarMovimentacao = async (req, res, next) => {
             saldo: movimentacao.saldo_produto
           }
           return tbl_produtos.update(update_saldo, {
+            transaction: t,
             where: {
               id_produto: movimentacao.fk_movimentacao_produto
             }
@@ -84,15 +86,13 @@ const criarMovimentacao = async (req, res, next) => {
       .then(() => {
         let t_operacao = ''
         if (req.body.tipo_operacao == 1) {
-          t_operacao = 'Sucesso ao realizar à entrada no estoque'
+          t_operacao = 'Sucesso ao realizar uma entrada no estoque'
         } else if (req.body.tipo_operacao == 2) {
-          t_operacao = 'Sucesso ao realizar à saída no estoque'
+          t_operacao = 'Sucesso ao realizar uma saída no estoque'
         }
-
         res.status(201).send(util.response("Movimentação", 201, t_operacao, "api/movimentacao", "POST"))
       })
       .catch((error) => {
-        console.log(error)
         let msg_erro = []
         for (e in error.errors) {
           msg_erro.push(util.msg_error("Ocorreu um erro",
@@ -101,7 +101,7 @@ const criarMovimentacao = async (req, res, next) => {
             error.errors[e].type,
             error.errors[e].validatorKey))
         }
-        res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/movimentacao", "POST", msg_erro))
+        res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/movimentacao", "POST", msg_erro))
       })
   } catch (error) {
     let msg_erro = [
@@ -112,14 +112,40 @@ const criarMovimentacao = async (req, res, next) => {
         validatorKey: 'Error'
       }
     ]
-    res.status(400).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/movimentacao", "POST", msg_erro))
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/movimentacao", "POST", msg_erro))
   }
 }
 
 const buscarMovimentacao = (req, res, next) => {
-  tbl_movimentacoes.findAll()
+  tbl_movimentacoes.findAll({
+    include: [
+      {
+        model: tbl_produtos,
+        as: 'produto'
+      },
+      {
+        model: tbl_meses,
+        as: 'mes'
+      },
+      {
+        model: tbl_tipo_documentos,
+        as: 'tipo_documento'
+      }
+    ]
+  })
     .then((mov) => {
-      res.send(mov)
+      if ((mov == null) || (mov == undefined) || (mov.length == 0)) {
+        res.status(200)
+          .send(util.response("Erro", 404, "Movimentações não encontradas", "api/movimentação", "GET", null))
+      } else {
+        res.status(200)
+          .send(util.response("Buscar movimentações", 200, mov, "api/movimentação", "GET", null))
+      }
+    }).catch((e) => {
+      console.error(e)
+      let error = e
+      res.status(200)
+        .send(util.response("Error", 400, 'Ocorreu um error na buscar de movimentações', "api/movimentação", "GET", error))
     })
 }
 

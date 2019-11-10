@@ -21,6 +21,7 @@ var unidade_medidasRouter = require('./app/routes/unidade_medidas');
 var produtosRouter = require('./app/routes/produtos');
 var notificacaoRouter = require('./app/routes/notificacao');
 var movimentacaoRouter = require('./app/routes/movimentacao');
+var tipoDocumentoRouter = require('./app/routes/tipo_documentos');
 // Rotas dos Relatorios
 var r_produtosRouter = require('./app/routes/relatorios/produtos');
 // Rota de validação de token
@@ -65,6 +66,7 @@ app.use('/api/unidade_medidas', unidade_medidasRouter);
 app.use('/api/produtos', produtosRouter);
 app.use('/api/notificacoes', notificacaoRouter);
 app.use('/api/movimentacao', movimentacaoRouter);
+app.use('/api/tipo_documento', tipoDocumentoRouter);
 // rotas relatorios
 app.use('/api/relatorios/produtos', r_produtosRouter);
 // rota de validação de token

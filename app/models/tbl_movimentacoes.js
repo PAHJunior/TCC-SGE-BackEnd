@@ -24,6 +24,12 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
     },
+    dt_fabricacao: {
+      type: DataTypes.DATE
+    },
+    dt_validade: {
+      type: DataTypes.DATE
+    },
     quantidade: {
       type: DataTypes.INTEGER(),
       allowNull: false,
@@ -32,11 +38,6 @@ module.exports = function (sequelize, DataTypes) {
           msg: 'Campo quantidade é obrigátorio.'
         }
       }
-    },
-    ativo: {
-      type: DataTypes.BOOLEAN(),
-      defaultValue: true,
-      allowNull: false
     },
     ajuste: {
       type: DataTypes.BOOLEAN(),
@@ -48,11 +49,33 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER(),
       allowNull: true
     },
+    preco_unitario: {
+      type: DataTypes.NUMERIC(14, 2),
+      allowNull: false,
+      validate: {
+				notNull: {
+					msg: 'Campo preço unitario é obrigátorio.'
+				}
+			}
+    },
+    documento: {
+      type: DataTypes.CHAR(45),
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Campo documento é obrigátorio.'
+        }
+      }
+    },
+    descricao: {
+      type: DataTypes.CHAR(100),
+      allowNull: true
+    },
     fk_movimentacao_produto: {
       type: DataTypes.INTEGER(),
       references: {
-        model: 'tbl_movimentacoes',
-        key: 'id_movimentacao'
+        model: 'tbl_produtos',
+        key: 'id_produto'
       }
     },
     fk_meses: {
@@ -60,6 +83,19 @@ module.exports = function (sequelize, DataTypes) {
       references: {
         model: 'tbl_meses',
         key: 'id_meses'
+      }
+    },
+    fk_tipo_documento: {
+      type: DataTypes.INTEGER(),
+      allowNull: false,
+      references: {
+        model: 'tbl_tipo_documentos',
+        key: 'id_tipo_documento'
+      },
+      validate: {
+        notNull: {
+          msg: 'Campo tipo de documento é obrigátorio.'
+        }
       }
     },
     versaoLocal: {
@@ -86,6 +122,12 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'fk_meses',
       targetKey: 'id_meses',
       as: 'mes'
+    });
+
+    tbl_movimentacoes.belongsTo(models.tbl_tipo_documentos, {
+      foreignKey: 'fk_tipo_documento',
+      targetKey: 'id_tipo_documento',
+      as: 'tipo_documento'
     });
   }
   return tbl_movimentacoes
