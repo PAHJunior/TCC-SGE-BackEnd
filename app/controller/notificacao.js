@@ -20,6 +20,7 @@ const buscarNotificacao = (req, res, next) => {
       }
     }
   })
+  
     .then((notificacao) => {
       if (notificacao.length == 0) {
         res.status(200).send(util.response(
