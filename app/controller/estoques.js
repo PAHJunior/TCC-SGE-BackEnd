@@ -136,9 +136,41 @@ const modificarEstoque = async (req, res, next) => {
   }
 }
 
+// metodos especias para as telas
+const buscarEstoqueAtivo = (req, res, next) => {
+  tbl_estoques.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt']
+    },
+    include: [{
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'fk_empresa_configuracao']
+      },
+      model: tbl_empresas,
+      as: 'empresa'
+    }],
+    where: {
+      ativo: true
+    }
+  })
+    .then((estoque) => {
+      if ((estoque == null) || (estoque == undefined) || (estoque.length == 0)) {
+        res.status(404)
+          .send(util.response("Erro", 404, "Estoque não encontrado", "api/estoques", "GET", null))
+      } else {
+        res.status(200)
+          .send(util.response("Buscar estoque", 200, estoque, "api/estoques", "GET", null))
+      }
+    }).catch((e) => {
+      let error = console.error(e)
+      res.status(400)
+        .send(util.response("Error", 400, 'Ocorreu um error ao buscar os estoques', "api/empresas", "GET", error))
+    })
+}
 module.exports = {
   buscarEstoque,
   buscarUmEstoque,
   cadastrarEstoque,
-  modificarEstoque
+  modificarEstoque,
+  buscarEstoqueAtivo
 }

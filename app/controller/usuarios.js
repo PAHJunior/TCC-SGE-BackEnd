@@ -157,47 +157,44 @@ const criarUsuario = (req, res, next) => {
     })
 }
 
-// Modificar um usuario
+
 const modificarUsuario = async (req, res, next) => {
 
-  // Buscando o usuario pelo id e guardando dentro de user
-  const user = await tbl_usuarios.findByPk(req.params.id)
   try {
+    const usuario = await tbl_usuarios.findByPk(req.params.id)
+    let alterEndereco = await tbl_enderecos.update(req.body.endereco, {
+      where: {
+        id_endereco: usuario.fk_usuario_endereco
+      }
+    })
 
-    if (user !== null) {
-      // adicionando a versão local ao corpo da requisição
-      req.body['versaoLocal'] = user.versaoLocal
-      // enviando a requisição de atualização
-      tbl_usuarios.update(req.body, {
-        where: {
-          id_usuario: req.params.id
-        }
-      })
-        .then((usuarios) => {
-          // se o retorno for 1, sucesso
-          if (usuarios == 1) {
-            res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
-          } else {
-            res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
-          }
-        })
-        .catch((error) => {
-          // variavel que contem um array de erros
-          let msg_erro = []
-          for (e in error.errors) {
-            // adicionando o json ao array de erros
-            msg_erro.push(util.msg_error("Ocorreu um erro",
-              error.errors[e].message,
-              error.errors[e].value,
-              error.errors[e].type,
-              error.errors[e].validatorKey))
-          }
-          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", msg_erro))
-        })
-    } else {
-      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/usuario", "PATCH", null))
+    let bodyUsuario = {
+      nome: req.body.nome,
+      rg: req.body.rg,
+      cpf: req.body.cpf,
+      dt_nascimento: util.data_yyymmdd(req.body.dt_nascimento),
+      telefone: req.body.telefone,
+      celular: req.body.celular,
+      email: req.body.email,
+      login: req.body.login,
+      senha: req.body.senha,
+      fk_usuario_empresa: req.body.fk_usuario_empresa,
+      fk_usuario_hierarquia: req.body.fk_usuario_hierarquia
+    }
+    let alterUser = await tbl_usuarios.update(bodyUsuario, {
+      where: {
+        id_usuario: req.params.id
+      }
+    })
+
+    if ((alterUser == 1) && (alterEndereco == 1)) {
+      return res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
+    }
+    else {
+      return res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
     }
   } catch (error) {
+    console.error(error)
     let msg_erro = []
     msg_erro.push(util.msg_error(
       "Ocorreu um erro",

@@ -121,41 +121,35 @@ const cadastrarFornecedor = (req, res, next) => {
 
 const modificarFornecedor = async (req, res, next) => {
   // Buscando o fornecedor pelo id
-  const fornecedor = await tbl_fornecedores.findByPk(req.params.id)
+  
   try {
-    if (fornecedor !== null) {
-      // adicionando a versão local ao corpo da requisição
-      req.body['versaoLocal'] = fornecedor.versaoLocal
-      // enviando a requisição de atualização
-      tbl_fornecedores.update(req.body, {
-        where: {
-          id_fornecedor: req.params.id
-        }
-      })
-        .then((fornecedor) => {
-          // se o retorno for 1, sucesso
-          if (fornecedor == 1) {
-            res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/fornecedores", "PATCH", null))
-          } else {
-            res.status(204).send(util.response("Sem alterações", 204, null, "api/fornecedores", "PATCH", null))
-          }
-        })
-        .catch((error) => {
-          // variavel que contem um array de erros
-          let msg_erro = []
-          for (e in error.errors) {
-            // adicionando o json ao array de erros
-            msg_erro.push(util.msg_error("Ocorreu um erro",
-              error.errors[e].message,
-              error.errors[e].value,
-              error.errors[e].type,
-              error.errors[e].validatorKey))
-          }
-          res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/fornecedores", "PATCH", msg_erro))
-        })
-    } else {
-      res.status(200).send(util.response("Erros", 404, `Usúario não foi encontrado`, "api/fornecedores", "PATCH", null))
+    const fornecedor = await tbl_fornecedores.findByPk(req.params.id)
+
+    let alterEndereco = await tbl_enderecos.update(req.body.endereco, {
+      where: {
+        id_endereco: fornecedor.fk_fornecedor_endereco
+      }
+    })
+
+    let alterarRepresentante = await tbl_representantes.update(req.body.representante, {
+      where: {
+        id_representante: fornecedor.fk_fornecedor_representante
+      }
+    })
+
+    let alterFornec = await tbl_fornecedores.update(req.body, {
+      where: {
+        id_fornecedor: req.params.id
+      }
+    })
+    
+    if ((alterFornec == 1) && (alterEndereco == 1) && (alterarRepresentante == 1)) {
+      return res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/fornecedor", "PATCH", null))
     }
+    else {
+      return res.status(204).send(util.response("Sem alterações", 204, null, "api/fornecedor", "PATCH", null))
+    }
+    
   } catch (error) {
     let msg_erro = []
     msg_erro.push(util.msg_error(
