@@ -4,20 +4,19 @@ const {
     buscarProdutos,
     buscarUmProdutos,
     criarProduto,
-    modificarProduto
+    modificarProduto,
+    buscarProdutoEstoque
 } = require('../controller/produtos')
 
-/* Buscar todos os produtos */
 router.get('/', buscarProdutos);
 
-/* Buscar um produtos. */
 router.get('/:id', buscarUmProdutos);
 
-/* Criar um grupo. */
 router.post('/', criarProduto);
 
-/* Modificar um grupo. */
 router.patch('/:id', modificarProduto);
+
+router.get('/estoque/:estoque', buscarProdutoEstoque);
 
 
 module.exports = router;

@@ -213,9 +213,76 @@ const modificarProduto = async (req, res, next) => {
   }
 }
 
+const buscarProdutoEstoque = (req, res, next) => {
+  tbl_produtos.findAll({
+    attributes: {
+      exclude: ['versaoLocal']
+    },
+    include: [{
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_unid_medidas,
+      as: 'unidade_medida'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_categoria_produtos,
+      as: 'categoria'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_grupo_produtos,
+      as: 'grupo'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_fornecedores,
+      as: 'fornecedor'
+    },
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_estoques,
+      as: 'estoque'
+    }],
+    where: {
+      fk_produto_estoque: req.params.estoque
+    }
+  })
+    .then((unid_medidas) => {
+      if ((unid_medidas == null) || (unid_medidas == undefined) || (unid_medidas.length == 0)) {
+        res.status(200)
+          .send(util.response("Erro", 404, "Os produtos não foram encontrados", "api/produtos", "GET", null))
+      } else {
+        res.status(200)
+          .send(util.response("Buscar produtos", 200, unid_medidas, "api/produtos", "GET", null))
+      }
+    }).catch((e) => {
+      let msg_erro = []
+      for (e in error.errors) {
+        // adicionando o json ao array de erros
+        msg_erro.push(util.msg_error("Ocorreu um erro",
+          error.errors[e].message,
+          error.errors[e].value,
+          error.errors[e].type,
+          error.errors[e].validatorKey))
+      }
+      res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/produtos", "GET", msg_erro))
+    })
+}
+
 module.exports = {
   buscarProdutos,
   buscarUmProdutos,
   criarProduto,
-  modificarProduto
+  modificarProduto,
+  buscarProdutoEstoque
 }

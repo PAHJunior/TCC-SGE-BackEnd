@@ -1,81 +1,103 @@
 <!DOCTYPE html>
 <html lang="en" >
-<head >
+  <head>
 
-  <style>
-    .invoice-box {
-        max-width: 1200px;
-        margin: auto;
-        padding: 30px;
-        border: 1px solid #eee;
-        box-shadow: 0 0 10px rgba(0, 0, 0, .15);
-        font-size: 16px;
-        line-height: 24px;
-        font-family: 'Helvetica Neue';
-        color: #555;
-    }
-    .company-logo-wrapper {
-      background-color: #555;
-      width:250px;
-      height:80px;
-      padding-top:10px;
-      border-radius:8px;
-    }
-  </style>
-  <title>Relatório de produtos</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <style>
+      .invoice-box {
+          max-width: 1200px;
+          margin: auto;
+          padding: 30px;
+          border: 1px solid #eee;
+          box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+          font-size: 16px;
+          line-height: 24px;
+          font-family: 'Helvetica Neue';
+          color: #555;
+      }
+      .company-logo-wrapper {
+        background-color: #555;
+        width:250px;
+        height:80px;
+        padding-top:10px;
+        border-radius:8px;
+      }
+    </style>
+    <title>RELATÓRIO DE PRODUTOS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-<body>
+    {{--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">  --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
 
-<div class="container invoice-box">
-  <h1 class="text-center">RELATÓRIO DE PRODUTOS</h1>
-  <br/>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Cod Produto</th>
-        <th>Data</th>
-        <th>Produto</th>
-        <th>Operação</th>
-        <th>Quantidade</th>
-        <th>Preço Unit</th>
-      </tr>
-    </thead>
-    <tbody>
-      @each(produto in produtos)
-      <tr>
-        <td> {{produto.id_produto }} </td>
-      <td> {{ produto.createdAt }} </td>
-        <td> {{ produto.nome_produto }} </td>
-        <td>Entrada</td>
-        <td>10</td>
-        <td> {{ produto.preco_unitario }} </td>
-      </tr>
-      @endeach
-    </tbody>
-    <tr class="total ">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="text-right">Total</td>
-        <td>
-          {{ produtos.total }}
-        </td>
-    </tr>
-  </table>
-</div>
+    <div id="btn_export" style="margin-top: 30px; margin-bottom: 30px" class=" container invoice-box">
+      <img src="http://qnimate.com/wp-content/uploads/2014/03/images2.jpg">
+      <h1 class="text-center">RELATÓRIO DE PRODUTOS</h1>
+      <br/>
+      <table id="relatorio_pdf_produtos" class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cod.</th>
+            <th>Produto</th>
+            <th>Saldo em estoque</th>
+            <th>Data de criação</th>
+            <th>Estoque</th>
+            <th>Status</th>
+            <th>Preço Unit</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(produto in produtos)
+          <tr>
+            <td> {{ produto.id_produto }} </td>
+            <td> {{ produto.codigo_produto }} </td>
+            <td> {{ produto.nome_produto }} </td>
+            <td> {{ produto.saldo }} </td>
+            <td class="text-center"> {{ produto.createdAt }} </td>
+            <td> Principal </td>
+            <td> {{ produto.ativo ? 'Ativo' : 'Inativo' }} </td>
+            <td> R$ {{ produto.preco_unitario }} </td>
+          </tr>
+          @endeach
+        </tbody>
+        <tfoot>
+          <tr class="total">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total:</td>
+            <td>
+                R$ {{ produtos.total }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
 
-</body>
+  </body>
 </html>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.colVis.min.js"></script>
 <script>
   function total(items) {
       var sum = 0
@@ -85,4 +107,47 @@
       return sum
   }
 });
+</script>
+
+<script>
+  $(document).ready(function() {
+    var table = $('#relatorio_pdf_produtos').DataTable( {
+      lengthChange: false,
+      buttons: [
+        {
+          text: '<i class="fa fa-files-o"></i>',
+          extend: 'copy',
+          footer: true,
+          titleAttr: 'Copiar'
+        },
+        {
+          text: '<i class="fa fa-file-excel-o"></i>',
+          extend: 'excel',
+          footer: true,
+          titleAttr: 'Excel'
+        },
+        {
+          text: '<i class="fa fa-file-text-o"></i>',
+          extend: 'csv',
+          footer: true,
+          titleAttr: 'CSV'
+        },
+        {
+          text: '<i class="fa fa-file-pdf-o"></i>',
+          extend: 'pdf',
+          footer: true,
+          titleAttr: 'PDF'
+        },
+        {
+          text: '<i class="fa fa-print"></i>',
+          extend: 'print',
+          footer: true,
+          titleAttr: 'Imprimir'
+        }
+      ]
+    });
+  
+    table.buttons().container()
+      .appendTo( '#btn_export .col-md-6:eq(0)' );
+  } );
 </script>

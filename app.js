@@ -68,7 +68,7 @@ app.use('/api/notificacoes', notificacaoRouter);
 app.use('/api/movimentacao', movimentacaoRouter);
 app.use('/api/tipo_documento', tipoDocumentoRouter);
 // rotas relatorios
-app.use('/api/relatorios/produtos', r_produtosRouter);
+app.use('/api/relatorios', r_produtosRouter);
 // rota de validação de token
 app.use('/api/validar', validarRouter);
 
