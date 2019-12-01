@@ -263,10 +263,32 @@ const loginUsuario = async (req, res, next) => {
   }
 }
 
+const modificarSenha = async (req, res, next) => {
+
+  try {
+    let alterSenha = await tbl_usuarios.update(req.body, {
+      where: {
+        id_usuario: req.params.id
+      }
+    })
+
+    if (alterSenha == 1) {
+      return res.status(200).send(util.response("Sucesso", 200, "Senha alterada com sucesso", "api/usuario", "PATCH", null))
+    }
+    else {
+      return res.status(204).send(util.response("Sem alterações", 204, null, "api/usuario", "PATCH", null))
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(200).send(util.response("Erros", 400, `Encontramos alguns erros`, "api/usuario", "PATCH", error[0].message))
+  }
+}
+
 module.exports = {
   criarUsuario,
   buscarTodosUsuarios,
   buscarUmUsuario,
   modificarUsuario,
-  loginUsuario
+  loginUsuario,
+  modificarSenha
 }

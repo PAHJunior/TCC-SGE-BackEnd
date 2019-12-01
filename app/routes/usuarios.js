@@ -5,7 +5,8 @@ const {
     buscarTodosUsuarios,
     buscarUmUsuario,
     modificarUsuario,
-    loginUsuario
+    loginUsuario,
+    modificarSenha
 } = require('../controller/usuarios.js')
 
 /* GET usuarios listing. */
@@ -18,6 +19,9 @@ router.post('/', criarUsuario);
 
 // Modificar um usuario
 router.patch('/:id', modificarUsuario);
+
+// Modificar senha
+router.patch('/:id/senha', modificarSenha);
 
 // Login
 router.post('/login', loginUsuario);

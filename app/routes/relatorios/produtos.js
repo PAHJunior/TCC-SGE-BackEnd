@@ -1,15 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const {
-    relatoriosProdutos,
-    reportproduto,
-    jsreportPDF
+    reportProdutoServer
 } = require('../../controller/relatorios/produtos')
 
-router.get('/produtos', relatoriosProdutos);
 
-router.get('/produtos2', reportproduto);
-
-router.get('/produtos3', jsreportPDF);
+router.get('/produtos/:estoque/:dtinicial/:dtfinal', reportProdutoServer);
 
 module.exports = router;

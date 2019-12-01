@@ -1,64 +1,18 @@
-const edge = require('edge.js');
-const path = require('path');
-const fs = require('fs');
-const {
-  generateHeader,
-  generateCustomerInformation,
-  generateInvoiceTable,
-  generateFooter
-} = require('./produtoreport')
 const db = require('../../models')
-const PDFDocument = require("pdfkit");
-const jsreport = require('jsreport')
-
+const client = require('jsreport-client')('http://localhost:5488')
+const util = require('../util');
 const {
-  tbl_produtos
+  tbl_produtos,
+  tbl_unid_medidas,
+  tbl_categoria_produtos,
+  tbl_grupo_produtos,
+  tbl_fornecedores,
+  tbl_estoques
 } = require('../../models');
+const Op = db.Sequelize.Op;
 
-edge.registerViews(path.join(__dirname, '../../../app/views/relatorios'))
-
-const invoice = {
-  shipping: {
-    name: "John Doe",
-    address: "1234 Main Street",
-    city: "San Francisco",
-    state: "CA",
-    country: "US",
-    postal_code: 94111
-  },
-  items: [
-    {
-      item: "TC 100",
-      description: "Toner Cartridge",
-      quantity: 2,
-      amount: 6000
-    },
-    {
-      item: "USB_EXT",
-      description: "USB Cable Extender",
-      quantity: 1,
-      amount: 2000
-    }
-  ],
-  subtotal: 8000,
-  paid: 0,
-  invoice_nr: 1234
-};
-
-const reportproduto = async (req, res, next) => {
-  let doc = new PDFDocument({ margin: 50 });
-
-  generateHeader(doc);
-  generateCustomerInformation(doc, invoice);
-  generateInvoiceTable(doc, invoice);
-  generateFooter(doc);
-
-  doc.pipe(res);
-  doc.end();
-}
-
-const relatoriosProdutos = async (req, res, next) => {
-  tbl_produtos.findAll({
+const reportProdutoServer = async (req, res, next) => {
+  let produtos = await tbl_produtos.findAll({
     attributes: [
       'id_produto',
       'codigo_produto',
@@ -67,50 +21,52 @@ const relatoriosProdutos = async (req, res, next) => {
       'saldo',
       'ativo',
       'fk_produto_estoque',
-      [db.sequelize.fn('date_format', db.sequelize.col('createdAt'), '%d-%m-%Y'), 'createdAt']
+      'createdAt',
+      [db.sequelize.fn('date_format', db.sequelize.col('tbl_produtos.createdAt'), '%d-%m-%Y'), 'createdAt']
     ],
+    include: [
+    {
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'versaoLocal']
+      },
+      model: tbl_estoques,
+      as: 'estoque'
+    }],
     where: {
-      fk_produto_estoque: 1
+      fk_produto_estoque: req.params.estoque,
+      createdAt: {
+        [Op.lte]: util.data_yyymmdd(req.params.dtfinal),
+        [Op.gte]: util.data_yyymmdd(req.params.dtinicial)
+      }
     }
   })
-    .then(async (produtos) => {
-      // res.send(produtos);
-      produtos['total'] = await produtos.reduce((sum, produtos) => {
-        return sum + parseFloat(produtos.preco_unitario)
-      }, 0)
-      produtos['total'] = parseFloat(produtos.total).toFixed(2)
 
-      return produtos
-    })
-    .then((produtos) => {
-      return produtos
-    })
-    .then((produtos) => {
-      res.send(edge.render('produtos', { produtos }))
-    })
-    .catch((error) => {
-      res.render('error', { error: error })
-    })
-}
-
-const jsreportPDF = async (req, res, next) => {
-
-  let report = new jsreport();
-  report.render({
+  const data = {
+    recipe: 'chrome-pdf',
+    engine: 'handlebars',
     template: {
-      content: '<h1>Hello world</h1>',
-      engine: 'handlebars',
-      recipe: 'chrone-pdf'
+      shortid: 'rkJTnK2ce'
+    },
+    data: {
+      items: await produtos.map((prod) => {
+        return {
+          cod_produto: prod.codigo_produto,
+          produto: prod.nome_produto,
+          saldo: prod.saldo,
+          dtcriacao: prod.createdAt,
+          estoque: prod.estoque.nome_estoque,
+          status: prod.ativo ? 'Ativo' : 'Inativo',
+          precounit: prod.preco_unitario
+        }
+      })
     }
-  }).then((out)  => {
-    out.stream.pipe(res);
-  }).catch((e) => {
-    res.end(e.message);
-  });
+  }
+  
+  client.render(data)
+    .then((response) => response.pipe(res))
+    .catch(next)
 }
 
 module.exports = {
-  relatoriosProdutos,
-  reportproduto,
-  jsreportPDF
+  reportProdutoServer
 }
