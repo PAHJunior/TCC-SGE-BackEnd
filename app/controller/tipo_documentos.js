@@ -3,6 +3,7 @@ const {
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
+const logs = require('./logs')
 
 const buscarTipo_documento = (req, res, next) => {
   tbl_tipo_documentos.findAll({
@@ -56,11 +57,13 @@ const criarTipo_documento = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'tipo de documento', `${req.body.loglogin} cadastrou um novo tipo de documento - ${result.tipo_documento}`)
       res.status(201).send(util.response("Cadastrar tipo de documento", 201, `Tipo documento ${result.tipo_documento} cadastrado com sucesso`, "api/tipo_documento", "POST"))
     })
     .catch((error) => {
       let msg_erro = []
       for (e in error.errors) {
+        logs.insertLog(req.body.loglogin, 'insert', 'tipo de documento', `Erro ao criar o tipo de documento`)
         msg_erro.push(util.msg_error("Ocorreu um erro",
           error.errors[e].message,
           error.errors[e].value,
@@ -87,6 +90,7 @@ const modificarTipo_documento = async (req, res, next) => {
         .then((tipo_documento) => {
           // se o retorno for 1, sucesso
           if (tipo_documento == 1) {
+            logs.insertLog(req.body.loglogin, 'update', 'tipo documento', `${req.body.loglogin} Alterou o tipo do documento - ${tipo_documento.tipo_documento}`)
             res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/tipo_documento", "PATCH", null))
           } else {
             res.status(204).send(util.response("Sem alterações", 204, null, "api/tipo_documento", "PATCH", null))

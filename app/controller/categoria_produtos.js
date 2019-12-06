@@ -3,6 +3,7 @@ const {
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
+const logs = require('./logs')
 
 const buscarCategoria_produtos = (req, res, next) => {
   tbl_categoria_produtos.findAll({
@@ -57,6 +58,7 @@ const criarCategoria_produto = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'categoria-produto', `${req.body.loglogin} cadastrou uma nova categoria de produto - ${result.nome}`)
       res.status(201).send(util.response("Cadastrar categoria", 201, `Categoria ${result.nome} cadastrada com sucesso`, "api/categoria_produtos", "POST"))
     })
     .catch((error) => {
@@ -88,6 +90,7 @@ const modificarCategoria_produto = async (req, res, next) => {
         .then((empresa) => {
           // se o retorno for 1, sucesso
           if (empresa == 1) {
+            logs.insertLog(req.body.loglogin, 'update', 'categoria-produto', `${req.body.loglogin} alterou a categoria-produto - #(ID) ${req.params.id}`)
             res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/categoria_produtos", "PATCH", null))
           } else {
             res.status(204).send(util.response("Sem alterações", 204, null, "api/categoria_produtos", "PATCH", null))

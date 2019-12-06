@@ -3,6 +3,7 @@ const {
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
+const logs = require('./logs')
 
 // Bscar todas as hierarquias
 const buscarHierarquia = (req, res, next) => {
@@ -59,6 +60,7 @@ const cadastrarHierarquia = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'hierarquia', `${req.body.loglogin} criou uma nova hierarquia - #(${result.nome})`)
       res.status(201).send(util.response("Cadastrar hierarquia", 201, `hierarquia ${result.nome} criada com sucesso`, "api/hierarquias", "POST"))
     })
     .catch((error) => {
@@ -92,6 +94,7 @@ const modificarHierarquia = async (req, res, next) => {
         .then((hierarquia) => {
           // se o retorno for 1, sucesso
           if (hierarquia == 1) {
+            logs.insertLog(req.body.loglogin, 'update', 'hierarquia', `${req.body.loglogin} alterou a hierarquia - #(${req.params.id})`)
             res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/hierarquias", "PATCH", null))
           } else {
             res.status(204).send(util.response("Sem alterações", 204, null, "api/hierarquias", "PATCH", null))

@@ -1,7 +1,8 @@
 const { tbl_fornecedores, tbl_representantes, tbl_enderecos } = require('../models');
-const util = require('./util');
-const bcrypt = require('bcrypt');
+const util = require('./util')
+const bcrypt = require('bcrypt')
 const db = require('../models')
+const logs = require('./logs')
 
 const buscarFornecedores = (req, res, next) => {
   tbl_fornecedores.findAll({
@@ -92,10 +93,12 @@ const cadastrarFornecedor = (req, res, next) => {
       transaction: t
     })
       .then((endereco) => {
+        logs.insertLog(req.body.loglogin, 'insert', 'endereco', `${req.body.loglogin} criou uma novo endreço - #(ID) ${endereco.id_endereco}`)
         req.body["fk_fornecedor_endereco"] = endereco.id_endereco
         return tbl_representantes.create(representante, {
           transaction: t
         }).then((representante) => {
+          logs.insertLog(req.body.loglogin, 'insert', 'representante', `${req.body.loglogin} criou uma novo representante - ${representante.nome} - #(ID) ${representante.id_representante}`)
           req.body["fk_fornecedor_representante"] = representante.id_representante
           return tbl_fornecedores.create(req.body, {
             transaction: t
@@ -104,6 +107,7 @@ const cadastrarFornecedor = (req, res, next) => {
       })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'fornecedor', `${req.body.loglogin} criou uma novo fornecedor - ${result.nome} -  #(ID) ${result.id_fornecedor}`)
       res.status(201).send(util.response("Cadastrar fornecedor", 201, `fornecedor ${result.nome} criado com sucesso`, "api/fornecedores", "POST"))
     })
     .catch((error) => {
@@ -144,6 +148,9 @@ const modificarFornecedor = async (req, res, next) => {
     })
     
     if ((alterFornec == 1) && (alterEndereco == 1) && (alterarRepresentante == 1)) {
+      logs.insertLog(req.body.loglogin, 'update', 'fornecedor', `${req.body.loglogin} alterou o fornecedor - #(ID) ${req.params.id}`)
+      logs.insertLog(req.body.loglogin, 'update', 'endereco', `${req.body.loglogin} alterou o endereco - #(ID) ${fornecedor.fk_fornecedor_endereco}`)
+      logs.insertLog(req.body.loglogin, 'update', 'representante', `${req.body.loglogin} alterou o representante - #(ID) ${fornecedor.fk_fornecedor_representante}`)
       return res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/fornecedor", "PATCH", null))
     }
     else {

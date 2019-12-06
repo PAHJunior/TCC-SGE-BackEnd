@@ -1,9 +1,10 @@
 const {
   tbl_estoques,
   tbl_empresas
-} = require('../models');
-const util = require('./util');
+} = require('../models')
+const util = require('./util')
 const db = require('../models')
+const logs = require('./logs')
 
 const buscarEstoque = (req, res, next) => {
   tbl_estoques.findAll({
@@ -71,6 +72,7 @@ const cadastrarEstoque = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'estoque', `${req.body.loglogin} criou uma novo estoque - ${result.nome_estoque}`)
       res.status(201).send(util.response("Cadastrar estoque", 201, `estoque ${result.nome_estoque} criado com sucesso`, "api/estoques", "POST"))
     })
     .catch((error) => {
@@ -103,6 +105,7 @@ const modificarEstoque = async (req, res, next) => {
         .then((estoque) => {
           // se o retorno for 1, sucesso
           if (estoque == 1) {
+            logs.insertLog(req.body.loglogin, 'update', 'estoque', `${req.body.loglogin} alterou o estoque - #(ID) ${req.params.id}`)
             res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/estoques", "PATCH", null))
           } else {
             res.status(204).send(util.response("Sem alterações", 204, null, "api/estoques", "PATCH", null))

@@ -7,6 +7,9 @@ module.exports = function (sequelize, DataTypes) {
 			autoIncrement: true
 		},
 		nome: {
+			unique: {
+				msg: 'Esse fornecedor já está cadastrada.'
+			},
 			type: DataTypes.CHAR(100),
 			allowNull: false,
 			validate: {

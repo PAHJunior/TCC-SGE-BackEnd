@@ -8,6 +8,7 @@ const {
 const util = require('./util');
 const bcrypt = require('bcrypt');
 const db = require('../models')
+const logs = require('./logs')
 
 // Buscar todos os usuarios
 const buscarTodosUsuarios = (req, res, next) => {
@@ -110,7 +111,8 @@ const criarUsuario = (req, res, next) => {
     return tbl_enderecos.create(endereco, {
       transaction: t
     })
-      .then((endereco) => {
+    .then((endereco) => {
+        logs.insertLog(req.body.loglogin, 'insert', 'usuarios', `${req.body.loglogin} cadastrou uma novo endereco #(ID) ${endereco.id_endereco}`)
         let usuario = {
           nome: req.body.nome,
           rg: req.body.rg,
@@ -142,6 +144,7 @@ const criarUsuario = (req, res, next) => {
   })
     .then(async (result) => {
       const usuario = await tbl_usuarios.findByPk(result.fk_usuario)
+      logs.insertLog(req.body.loglogin, 'insert', 'usuarios', `${req.body.loglogin} cadastrou uma novo usuario #(nome) ${usuario.login}`)
       res.status(201).send(util.response("Cadastrar usúario", 201, `usúario ${usuario.login} criado com sucesso`, "api/usuario", "POST"))
     })
     .catch((error) => {
@@ -188,6 +191,7 @@ const modificarUsuario = async (req, res, next) => {
     })
 
     if ((alterUser == 1) && (alterEndereco == 1)) {
+      logs.insertLog(req.body.loglogin, 'update', 'usuarios', `${req.body.loglogin} modificou o usuario ${req.body.nome}`)
       return res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/usuario", "PATCH", null))
     }
     else {
@@ -273,6 +277,7 @@ const modificarSenha = async (req, res, next) => {
     })
 
     if (alterSenha == 1) {
+      logs.insertLog(req.body.loglogin, 'update', 'usuarios', `Senha do usuario ${req.body.loglogin} modificou o usuario ${req.body.nome}`)
       return res.status(200).send(util.response("Sucesso", 200, "Senha alterada com sucesso", "api/usuario", "PATCH", null))
     }
     else {

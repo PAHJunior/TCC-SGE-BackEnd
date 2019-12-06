@@ -6,6 +6,7 @@ const {
   tbl_fornecedores,
   tbl_estoques
 } = require('../models');
+const logs = require('./logs')
 const util = require('./util');
 const db = require('../models')
 
@@ -146,6 +147,7 @@ const criarProduto = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'produtos', `${req.body.loglogin} cadastrou um novo produto - ${result.nome_produto}`)
       res.status(201).send(util.response("Cadastrar produto", 201, `Produto ${result.nome_produto} criado com sucesso`, "api/produtos", "POST"))
     })
     .catch((error) => {
@@ -180,6 +182,7 @@ const modificarProduto = async (req, res, next) => {
         .then((produto) => {
           // se o retorno for 1, sucesso
           if (produto == 1) {
+            logs.insertLog(req.body.loglogin, 'update', 'produtos', `${req.body.loglogin} alterou o produto - ${produto.nome_produto}`)
             res.status(200).send(util.response("Sucesso", 200, "Alterado com sucesso", "api/produtos", "PATCH", null))
           } else {
             res.status(204).send(util.response("Sem alterações", 204, null, "api/produtos", "PATCH", null))

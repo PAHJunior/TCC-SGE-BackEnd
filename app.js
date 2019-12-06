@@ -26,6 +26,8 @@ var tipoDocumentoRouter = require('./app/routes/tipo_documentos');
 var r_produtosRouter = require('./app/routes/relatorios/produtos');
 // Rota de validação de token
 var validarRouter = require('./app/routes/validar');
+// Rota de log do sistema
+var logRouter = require('./app/routes/logs');
 
 var app = express();
 
@@ -71,6 +73,8 @@ app.use('/api/tipo_documento', tipoDocumentoRouter);
 app.use('/api/relatorios', r_produtosRouter);
 // rota de validação de token
 app.use('/api/validar', validarRouter);
+// rota de logs vindo do mongodb
+app.use('/api/log', logRouter);
 
 
 // catch 404 and forward to error handler

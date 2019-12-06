@@ -3,6 +3,7 @@ const {
   tbl_usuarios,
   tbl_hierarquias
 } = require('../models');
+
 const util = require('./util');
 const db = require('../models')
 const Op = db.Sequelize.Op;

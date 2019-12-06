@@ -7,6 +7,7 @@ const {
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
+const logs = require('./logs')
 
 const criarMovimentacao = async (req, res, next) => {
   try {
@@ -51,6 +52,7 @@ const criarMovimentacao = async (req, res, next) => {
           fk_hierarquia: 1,
           descricao: `O saldo do produto ${produto.nome_produto} é de ${saldo} e está abaixo do nivel defenido como quantidade miníma, '${produto.quantidade_min}'`
         }
+        logs.insertLog(req.body.loglogin, 'notificacao', 'movimentacao', `O saldo do produto ${produto.nome_produto} é de ${saldo} e está abaixo do nivel defenido como quantidade miníma, '${produto.quantidade_min}'`)
         await tbl_notificacoes.create(notify)
       }
       else if (req.body.quantidade <= 0) {
@@ -75,6 +77,7 @@ const criarMovimentacao = async (req, res, next) => {
           let update_saldo = {
             saldo: movimentacao.saldo_produto
           }
+          logs.insertLog(req.body.loglogin, 'update', 'movimentacao', `${req.body.loglogin} atualizou o saldo do produto - #(${produto.nome_produto})`)
           return tbl_produtos.update(update_saldo, {
             transaction: t,
             where: {
@@ -90,6 +93,7 @@ const criarMovimentacao = async (req, res, next) => {
         } else if (req.body.tipo_operacao == 2) {
           t_operacao = 'Sucesso ao realizar uma saída no estoque'
         }
+        logs.insertLog(req.body.loglogin, 'insert', 'movimentacao', `${req.body.loglogin} gerou uma nova movimentação de ${t_operacao} no produto - #(${produto.nome_produto})`)
         res.status(201).send(util.response("Movimentação", 201, t_operacao, "api/movimentacao", "POST"))
       })
       .catch((error) => {

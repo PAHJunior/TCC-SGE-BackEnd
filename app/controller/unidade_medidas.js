@@ -3,6 +3,7 @@ const {
 } = require('../models');
 const util = require('./util');
 const db = require('../models')
+const logs = require('./logs')
 
 const buscarUnid_medida = (req, res, next) => {
   tbl_unid_medidas.findAll({
@@ -56,6 +57,7 @@ const criarUnid_medida = (req, res, next) => {
     })
   })
     .then((result) => {
+      logs.insertLog(req.body.loglogin, 'insert', 'unidade de medidas', `${req.body.loglogin} cadastrou uma nova unidade de medida - ${result.nome}`)
       res.status(201).send(util.response("Cadastrar unidade de medida", 201, `Unidade de medida ${result.nome} criada com sucesso`, "api/unidade_medidas", "POST"))
     })
     .catch((error) => {
