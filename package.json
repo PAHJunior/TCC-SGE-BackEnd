@@ -13,7 +13,7 @@
     "date-format": "^3.0.0",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",
-    "edge.js": "^1.1.4",
+    "edge.js": "^5.3.2",
     "express": "~4.16.0",
     "express-session": "^1.16.2",
     "http-errors": "~1.6.2",
